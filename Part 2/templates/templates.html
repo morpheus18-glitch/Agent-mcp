@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Templates - LLM Sandbox{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <div class="flex flex-col space-y-2 mb-6">
+        <h1 class="text-3xl font-bold">Templates</h1>
+        <p class="text-muted-foreground">Browse, create, and manage templates for conversations and agents</p>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Sidebar -->
+        <div class="w-full md:w-64 space-y-6">
+            <div class="rounded-md border bg-card text-card-foreground shadow-sm">
+                <div class="flex flex-col space-y-1.5 p-6 pb-3">
+                    <h3 class="text-lg font-semibold leading-none tracking-tight">Categories</h3>
+                </div>
+                <div class="p-0">
+                    <div class="space-y-1 px-4 pb-4">
+                        {% for category in categories %}
+                        <a href="?category={{ category.id }}" class="inline-flex items-center justify-start w-full px-4 py-2 text-sm font-medium transition-colors rounded-md {% if active_category == category.id %}bg-primary text-primary-foreground{% else %}hover:bg-accent hover:text-accent-foreground{% endif %}">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-md border bg-card text-card-foreground shadow-sm">
+                <div class="flex flex-col space-y-1.5 p-6 pb-3">
+                    <h3 class="text-lg font-semibold leading-none tracking-tight">Actions</h3>
+                </div>
+                <div class="p-0">
+                    <div class="space-y-1 px-4 pb-4">
+                        <a href="{% url 'create_template' %}" class="inline-flex items-center justify-start w-full px-4 py-2 text-sm font-medium transition-colors bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+                            Create Template
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 space-y-6">
+            {% if templates %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for template in templates %}
+                <div class="rounded-md border bg-card text-card-foreground shadow-sm overflow-hidden">
+                    <div class="flex flex-col space-y-1.5 p-6 pb-2">
+                        <h3 class="text-lg font-semibold">{{ template.name }}</h3>
+                        <p class="text-sm text-muted-foreground">{{ template.description }}</p>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            {% for tag in template.tags %}
+                            <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors bg-secondary text-secondary-foreground">
+                                {{ tag }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        <div class="text-xs text-muted-foreground">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                Created {{ template.created_at|date:"M d, Y" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-muted/50 p-3 flex justify-between">
+                        <a href="{% url 'export_template' template.id %}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
+                            Export
+                        </a>
+                        <a href="{% url 'use_template' template.id %}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
+                            Use Template
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="rounded-md border bg-card text-card-foreground shadow-sm">
+                <div class="flex flex-col items-center justify-center py-12 p-6">
+                    <div class="rounded-full bg-muted p-3 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium mb-2">No templates found</h3>
+                    <p class="text-muted-foreground text-center mb-4">
+                        No templates found in this category
+                    </p>
+                    <a href="{% url 'create_template' %}" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
+                        Create Template
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
