@@ -12,3 +12,31 @@ export async function query(query: string, params: any[] = []) {
     throw error
   }
 }
+
+// Type definitions for our database models
+export interface Conversation {
+  id: string // UUID
+  title: string
+  template_id: number | null
+  agent_id: number | null
+  status: string
+  settings: Record<string, any>
+  created_at: Date
+  updated_at: Date
+  last_activity: Date
+}
+
+export interface ConversationMessage {
+  id: string // UUID
+  conversation_id: string // UUID
+  role: string
+  content: string
+  created_at: Date
+}
+
+export interface ConversationVector {
+  id: string // UUID
+  conversation_id: string // UUID
+  vector_data: Record<string, any>
+  created_at: Date
+}
