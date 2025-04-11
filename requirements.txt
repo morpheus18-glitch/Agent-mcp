@@ -21,3 +21,5 @@ redis==5.0.1
 channels==4.0.0
 channels-redis==4.1.0
 bcrypt==4.0.1
+uvicorn
+fastapi
