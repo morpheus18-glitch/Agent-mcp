@@ -1,55 +1,14 @@
-import { Pool, type Client } from "pg"
+import { neon } from "@neondatabase/serverless"
 
-// Create a connection pool for server-side operations
-let pool: Pool | null = null
+// Create a SQL client
+export const sql = neon(process.env.DATABASE_URL!)
 
-export function getPool(): Pool {
-  if (!pool) {
-    const connectionString = process.env.DATABASE_URL
-
-    if (!connectionString) {
-      throw new Error("DATABASE_URL environment variable is not set")
-    }
-
-    pool = new Pool({
-      connectionString,
-      max: 10,
-      ssl: true,
-    })
-  }
-  return pool
-}
-
-// For server components and API routes
-export async function query(text: string, params?: any[]) {
-  const client = await getPool().connect()
+// Helper function to execute a query
+export async function query(query: string, params: any[] = []) {
   try {
-    return await client.query(text, params)
-  } finally {
-    client.release()
-  }
-}
-
-// Transaction function
-export async function transaction(callback: (client: Client) => Promise<any>): Promise<any> {
-  const client = await getPool().connect()
-  try {
-    await client.query("BEGIN")
-    const result = await callback(client)
-    await client.query("COMMIT")
-    return result
+    return await sql(query, params)
   } catch (error) {
-    await client.query("ROLLBACK")
+    console.error("Database query error:", error)
     throw error
-  } finally {
-    client.release()
-  }
-}
-
-// Close the pool (useful for tests and scripts)
-export async function closePool() {
-  if (pool) {
-    await pool.end()
-    pool = null
   }
 }
