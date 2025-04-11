@@ -3,12 +3,6 @@ set -e
 
 echo "Starting LLM Sandbox setup..."
 
-# Install Python dependencies
-if [ -f "requirements.txt" ]; then
-  echo "Installing Python dependencies..."
-  pip install -r requirements.txt
-fi
-
 # Set up database tables if needed
 if [ -n "$DATABASE_URL" ]; then
   echo "Setting up database..."
