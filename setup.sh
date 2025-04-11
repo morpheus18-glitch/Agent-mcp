@@ -5,7 +5,7 @@ echo "Starting LLM Sandbox setup..."
 
 # Install required packages for the setup script
 echo "Installing required packages..."
-npm install @neondatabase/serverless
+npm install @neondatabase/serverless --legacy-peer-deps
 
 # Set up database tables if needed
 if [ -n "$DATABASE_URL" ]; then

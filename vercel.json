@@ -1,4 +1,4 @@
 {
   "version": 2,
-  "buildCommand": "chmod +x setup.sh && ./setup.sh && next build"
+  "buildCommand": "chmod +x setup.sh && ./setup.sh && npm install --legacy-peer-deps && next build"
 }
