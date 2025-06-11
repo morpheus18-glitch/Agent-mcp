@@ -93,6 +93,9 @@ export class AgentToAgentProtocol {
 
   // Register a new agent
   registerAgent(agent: A2AAgent): void {
+    if (this.agents.has(agent.id)) {
+      throw new Error(`Agent with ID ${agent.id} is already registered`)
+    }
     this.agents.set(agent.id, agent)
   }
 
@@ -112,7 +115,8 @@ export class AgentToAgentProtocol {
     const timestamp = new Date().toISOString()
 
     // Verify all participants are registered
-    for (const participantId of participants) {
+    const uniqueParticipants = Array.from(new Set(participants))
+    for (const participantId of uniqueParticipants) {
       if (!this.agents.has(participantId)) {
         throw new Error(`Agent with ID ${participantId} is not registered`)
       }
@@ -121,7 +125,7 @@ export class AgentToAgentProtocol {
     const conversation: A2AConversation = {
       id,
       title,
-      participants,
+      participants: uniqueParticipants,
       messages: [],
       createdAt: timestamp,
       updatedAt: timestamp,

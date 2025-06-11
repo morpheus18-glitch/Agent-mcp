@@ -8,7 +8,7 @@ export default function TroubleshootingBanner() {
         <div>
           <p className="font-medium">Authentication is temporarily disabled</p>
           <p className="text-sm">
-            We've temporarily disabled authentication to allow you to explore the sandbox without login.
+            We&apos;ve temporarily disabled authentication to allow you to explore the sandbox without login.
           </p>
         </div>
       </div>
