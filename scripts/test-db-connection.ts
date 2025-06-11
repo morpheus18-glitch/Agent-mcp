@@ -1,4 +1,4 @@
-import { getPool, query } from "../lib/db"
+import { getPool, query, closePool } from "../lib/db"
 import dotenv from "dotenv"
 
 // Load environment variables
@@ -37,13 +37,23 @@ async function testConnection() {
       tables.rows.forEach((row, index) => {
         console.log(`${index + 1}. ${row.table_name}`)
       })
+
+      // Verify critical tables exist
+      const requiredTables = ["users", "conversations"]
+      const missingTables = requiredTables.filter(
+        (name) => !tables.rows.some((row) => row.table_name === name)
+      )
+      if (missingTables.length > 0) {
+        console.warn(
+          `Warning: Missing required tables: ${missingTables.join(", ")}. You may need to run the setup-db script.`
+        )
+      }
     }
   } catch (error) {
     console.error("Database connection test failed:", error)
   } finally {
     // Close the pool
-    const pool = getPool()
-    await pool.end()
+    await closePool()
   }
 }
 
