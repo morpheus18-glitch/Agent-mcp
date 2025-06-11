@@ -1,5 +1,5 @@
 import { hash } from "bcrypt"
-import { query, transaction } from "@/lib/db"
+import { query, transaction, closePool } from "@/lib/db"
 import dotenv from "dotenv"
 
 // Load environment variables
@@ -44,6 +44,8 @@ async function seedAdminUser() {
     console.log("Please change this password after first login.")
   } catch (error) {
     console.error("Error seeding admin user:", error)
+  } finally {
+    await closePool()
   }
 }
 
