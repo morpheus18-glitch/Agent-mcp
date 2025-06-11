@@ -994,7 +994,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 </Button>
               </div>
             </div>
-            <CardDescription>Customize your character's appearance</CardDescription>
+            <CardDescription>Customize your character&apos;s appearance</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
