@@ -1,4 +1,4 @@
-import { getPool, query } from "../lib/db"
+import { closePool, query } from "../lib/db"
 import dotenv from "dotenv"
 
 // Load environment variables
@@ -42,8 +42,7 @@ async function testConnection() {
     console.error("Database connection test failed:", error)
   } finally {
     // Close the pool
-    const pool = getPool()
-    await pool.end()
+    await closePool()
   }
 }
 
