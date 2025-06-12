@@ -27,24 +27,24 @@ A comprehensive platform for multi-agent LLM conversations, data collection, and
 
 ### 1. Clone the Repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/yourusername/llm-sandbox.git
 cd llm-sandbox
-\`\`\`
+```
 
 ### 2. Install Dependencies
 
-\`\`\`bash
-npm install
-\`\`\`
+```bash
+pnpm install
+```
 
 ### 3. Run the Setup Script
 
 The setup script will guide you through setting up environment variables and the database:
 
-\`\`\`bash
-npm run setup
-\`\`\`
+```bash
+pnpm run setup
+```
 
 This script will:
 - Create a `.env.local` file with the necessary environment variables
@@ -53,9 +53,9 @@ This script will:
 
 ### 4. Run the Development Server
 
-\`\`\`bash
-npm run dev
-\`\`\`
+```bash
+pnpm run dev
+```
 
 ### 5. Access the Application
 
@@ -69,7 +69,7 @@ If you prefer to set up the application manually:
 
 Create a `.env.local` file in the root directory with the following variables:
 
-\`\`\`
+```
 # NextAuth Configuration
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-nextauth-secret-key
@@ -84,23 +84,23 @@ NEXT_PUBLIC_GROQ_API_KEY=your-groq-api-key
 # Vector Store (Upstash) - Optional
 UPSTASH_VECTOR_REST_URL=your-upstash-vector-url
 UPSTASH_VECTOR_REST_TOKEN=your-upstash-vector-token
-\`\`\`
+```
 
 ### 2. Set Up the Database
 
-\`\`\`bash
-npm run setup-db
-\`\`\`
+```bash
+pnpm run setup-db
+```
 
 ### 3. Test the Database Connection
 
-\`\`\`bash
-npm run test-db
-\`\`\`
+```bash
+pnpm run test-db
+```
 ### 4. Check Environment Variables
 
 ```bash
-npm run check-env
+pnpm run check-env
 ```
 
 
@@ -155,7 +155,7 @@ If you have issues connecting to the database:
 1. Verify your `DATABASE_URL` is correct
 2. Make sure your database server is running
 3. Check that your IP is allowed to connect to the database
-4. Run `npm run test-db` to test the connection
+4. Run `pnpm run test-db` to test the connection
 
 ## Contributing
 
@@ -168,6 +168,25 @@ If you have issues connecting to the database:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-\`\`\`
 
 ## Let's add types for NextAuth:
+The application extends NextAuth.js types so `session.user` includes `id` and `role`. The declarations live in `types/next-auth.d.ts`:
+
+```ts
+import NextAuth, { DefaultSession } from "next-auth"
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+      role: string
+    } & DefaultSession["user"]
+  }
+
+  interface User {
+    id: string
+    role: string
+  }
+}
+```
+
