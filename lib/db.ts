@@ -1,14 +1,29 @@
 import { neon } from "@neondatabase/serverless"
 import type { NeonQueryFunction } from "@neondatabase/serverless"
 
-// Create a SQL client
-export const sql = neon(process.env.DATABASE_URL!)
+let cachedSql: NeonQueryFunction | null = null
+
+/**
+ * Lazily create and return the Neon client. This avoids evaluating the
+ * connection string at build time when environment variables might not be set.
+ */
+function getSqlClient(): NeonQueryFunction {
+  if (!cachedSql) {
+    const url = process.env.DATABASE_URL
+    if (!url) {
+      throw new Error("DATABASE_URL environment variable is not set")
+    }
+    cachedSql = neon(url)
+  }
+  return cachedSql
+}
 
 // Provide a wrapper around the neon transaction API so callers receive an
 // object with a `query` method. This matches how our scripts use the helper.
 export async function transaction<T>(
   fn: (client: { query: NeonQueryFunction }) => Promise<T>,
 ): Promise<T> {
+  const sql = getSqlClient()
   return sql.transaction((inner) => {
     const client = { query: inner }
     return fn(client)
@@ -18,6 +33,7 @@ export async function transaction<T>(
 // Helper function to execute a query
 export async function query(query: string, params: any[] = []) {
   try {
+    const sql = getSqlClient()
     return await sql(query, params)
   } catch (error) {
     console.error("Database query error:", error)
@@ -28,7 +44,7 @@ export async function query(query: string, params: any[] = []) {
 // In the serverless client there is no persistent pool, but we expose helpers
 // for API compatibility with code that expects them.
 export function getPool() {
-  return sql
+  return getSqlClient()
 }
 
 export async function closePool() {

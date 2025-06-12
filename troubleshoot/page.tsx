@@ -73,7 +73,7 @@ export default function TroubleshootPage() {
             <p className="mb-4">
               Run the database test script to verify your connection and check if all required tables exist:
             </p>
-            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md font-mono text-sm mb-4">npm run test-db</div>
+            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md font-mono text-sm mb-4">pnpm run test-db</div>
             <Alert variant="warning">
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Important</AlertTitle>
@@ -94,7 +94,7 @@ export default function TroubleshootPage() {
             <ol className="list-decimal list-inside space-y-2 mb-4">
               <li>Stop the development server</li>
               <li>Delete the .next folder</li>
-              <li>Run npm install to ensure all dependencies are correctly installed</li>
+              <li>Run pnpm install to ensure all dependencies are correctly installed</li>
               <li>Start the development server again</li>
             </ol>
             <Button asChild variant="outline">

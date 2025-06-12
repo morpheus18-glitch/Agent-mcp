@@ -35,7 +35,7 @@ cd llm-sandbox
 ### 2. Install Dependencies
 
 \`\`\`bash
-npm install
+pnpm install
 \`\`\`
 
 ### 3. Run the Setup Script
@@ -43,7 +43,7 @@ npm install
 The setup script will guide you through setting up environment variables and the database:
 
 \`\`\`bash
-npm run setup
+pnpm run setup
 \`\`\`
 
 This script will:
@@ -54,7 +54,7 @@ This script will:
 ### 4. Run the Development Server
 
 \`\`\`bash
-npm run dev
+pnpm run dev
 \`\`\`
 
 ### 5. Access the Application
@@ -89,18 +89,18 @@ UPSTASH_VECTOR_REST_TOKEN=your-upstash-vector-token
 ### 2. Set Up the Database
 
 \`\`\`bash
-npm run setup-db
+pnpm run setup-db
 \`\`\`
 
 ### 3. Test the Database Connection
 
 \`\`\`bash
-npm run test-db
+pnpm run test-db
 \`\`\`
 ### 4. Check Environment Variables
 
 ```bash
-npm run check-env
+pnpm run check-env
 ```
 
 
@@ -155,7 +155,7 @@ If you have issues connecting to the database:
 1. Verify your `DATABASE_URL` is correct
 2. Make sure your database server is running
 3. Check that your IP is allowed to connect to the database
-4. Run `npm run test-db` to test the connection
+4. Run `pnpm run test-db` to test the connection
 
 ## Contributing
 
