@@ -58,7 +58,8 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
-    "@neondatabase/serverless": "latest"
+    "@neondatabase/serverless": "latest",
+    "next-auth": "^4.24.11"
   },
   "devDependencies": {
     "@types/node": "^22",
