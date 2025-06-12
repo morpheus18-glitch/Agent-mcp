@@ -1,42 +1,55 @@
-import { neon } from "@neondatabase/serverless"
+import { Pool, type Client } from "pg"
 
-// Create a SQL client
-export const sql = neon(process.env.DATABASE_URL!)
+// Create a connection pool for server-side operations
+let pool: Pool | null = null
 
-// Helper function to execute a query
-export async function query(query: string, params: any[] = []) {
+export function getPool(): Pool {
+  if (!pool) {
+    const connectionString = process.env.DATABASE_URL
+
+    if (!connectionString) {
+      throw new Error("DATABASE_URL environment variable is not set")
+    }
+
+    pool = new Pool({
+      connectionString,
+      max: 10,
+      ssl: true,
+    })
+  }
+  return pool
+}
+
+// For server components and API routes
+export async function query(text: string, params?: any[]) {
+  const client = await getPool().connect()
   try {
-    return await sql(query, params)
-  } catch (error) {
-    console.error("Database query error:", error)
-    throw error
+    return await client.query(text, params)
+  } finally {
+    client.release()
   }
 }
 
-// Type definitions for our database models
-export interface Conversation {
-  id: string // UUID
-  title: string
-  template_id: number | null
-  agent_id: number | null
-  status: string
-  settings: Record<string, any>
-  created_at: Date
-  updated_at: Date
-  last_activity: Date
+// Transaction function
+export async function transaction(callback: (client: Client) => Promise<any>): Promise<any> {
+  const client = await getPool().connect()
+  try {
+    await client.query("BEGIN")
+    const result = await callback(client)
+    await client.query("COMMIT")
+    return result
+  } catch (error) {
+    await client.query("ROLLBACK")
+    throw error
+  } finally {
+    client.release()
+  }
 }
 
-export interface ConversationMessage {
-  id: string // UUID
-  conversation_id: string // UUID
-  role: string
-  content: string
-  created_at: Date
-}
-
-export interface ConversationVector {
-  id: string // UUID
-  conversation_id: string // UUID
-  vector_data: Record<string, any>
-  created_at: Date
+// Close the pool (useful for tests and scripts)
+export async function closePool() {
+  if (pool) {
+    await pool.end()
+    pool = null
+  }
 }
