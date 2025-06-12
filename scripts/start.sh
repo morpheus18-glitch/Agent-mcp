@@ -3,7 +3,7 @@
 # Print environment info
 echo "Starting LLM Sandbox..."
 echo "Node version: $(node -v)"
-echo "NPM version: $(npm -v)"
+echo "PNPM version: $(pnpm -v)"
 echo "Environment: $NODE_ENV"
 
 # Check required environment variables
@@ -28,4 +28,4 @@ fi
 
 # Start the Next.js application
 echo "Starting Next.js application..."
-exec npm start
+exec pnpm start

@@ -55,7 +55,7 @@ UPSTASH_VECTOR_REST_TOKEN=your-upstash-vector-token`}
                 <Info className="h-4 w-4" />
                 <AlertTitle>Tip</AlertTitle>
                 <AlertDescription>
-                  You can use the <code className="bg-muted px-1 py-0.5 rounded">npm run setup</code> command to run the
+                  You can use the <code className="bg-muted px-1 py-0.5 rounded">pnpm run setup</code> command to run the
                   setup script, which will guide you through the process of creating the .env.local file.
                 </AlertDescription>
               </Alert>
@@ -130,13 +130,13 @@ UPSTASH_VECTOR_REST_TOKEN=your-upstash-vector-token`}
               <div className="space-y-2">
                 <Label>Database Schema Setup</Label>
                 <p className="text-sm">Run the following command to set up the database schema:</p>
-                <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md font-mono text-sm">npm run setup-db</div>
+                <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md font-mono text-sm">pnpm run setup-db</div>
               </div>
 
               <div className="space-y-2">
                 <Label>Test Database Connection</Label>
                 <p className="text-sm">Run the following command to test your database connection:</p>
-                <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md font-mono text-sm">npm run test-db</div>
+                <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md font-mono text-sm">pnpm run test-db</div>
               </div>
             </CardContent>
           </Card>
