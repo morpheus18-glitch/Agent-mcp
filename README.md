@@ -51,13 +51,24 @@ This script will:
 - Set up the database tables
 - Test the database connection
 
-### 4. Run the Development Server
+### 4. Run the ESLint Setup (optional)
+
+Run the interactive ESLint setup to create a configuration and install
+dependencies:
+
+\`\`\`bash
+npm run setup-lint
+\`\`\`
+
+After running this command, you can lint the project with `npm run lint`.
+
+### 5. Run the Development Server
 
 \`\`\`bash
 npm run dev
 \`\`\`
 
-### 5. Access the Application
+### 6. Access the Application
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
