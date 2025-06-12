@@ -88,7 +88,7 @@ NEXT_PUBLIC_GROQ_API_KEY=${groqApiKey}
   // Set up the database
   console.log("\n🗄️  Setting up the database...")
   try {
-    execSync("npm run setup-db", { stdio: "inherit" })
+    execSync("pnpm run setup-db", { stdio: "inherit" })
     console.log("✅ Database setup completed")
   } catch (error) {
     console.error("❌ Database setup failed")
@@ -98,7 +98,7 @@ NEXT_PUBLIC_GROQ_API_KEY=${groqApiKey}
   // Test the database connection
   console.log("\n🔍 Testing database connection...")
   try {
-    execSync("npm run test-db", { stdio: "inherit" })
+    execSync("pnpm run test-db", { stdio: "inherit" })
     console.log("✅ Database connection test completed")
   } catch (error) {
     console.error("❌ Database connection test failed")
@@ -108,7 +108,7 @@ NEXT_PUBLIC_GROQ_API_KEY=${groqApiKey}
   // Create admin user
   console.log("\n👤 Creating admin user...")
   try {
-    execSync("npm run seed-admin", { stdio: "inherit" })
+    execSync("pnpm run seed-admin", { stdio: "inherit" })
     console.log("✅ Admin user created")
   } catch (error) {
     console.error("❌ Admin user creation failed")
@@ -116,7 +116,7 @@ NEXT_PUBLIC_GROQ_API_KEY=${groqApiKey}
   }
 
   console.log("\n🎉 Setup completed!")
-  console.log("You can now run the application with: npm run dev")
+  console.log("You can now run the application with: pnpm run dev")
 
   rl.close()
 }

@@ -5,15 +5,15 @@ ENV NODE_ENV=production
 
 # Install dependencies only when needed
 FROM base AS deps
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml* ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 # Build the Next.js application
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN corepack enable pnpm && pnpm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -38,4 +38,4 @@ RUN chmod +x ./start.sh
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]

@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import type React from "react"
 
 import { useState, useEffect } from "react"
@@ -30,7 +32,10 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
-  const { data: session, status, update } = useSession()
+  const sessionData = useSession()
+  const session = sessionData?.data
+  const status = sessionData?.status
+  const update = sessionData?.update
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
