@@ -1,4 +1,4 @@
-import { hash } from "bcrypt"
+import { hash } from "bcryptjs"
 import { query, transaction } from "@/lib/db"
 import dotenv from "dotenv"
 

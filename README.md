@@ -97,6 +97,12 @@ npm run setup-db
 \`\`\`bash
 npm run test-db
 \`\`\`
+### 4. Check Environment Variables
+
+```bash
+npm run check-env
+```
+
 
 ## Database Schema
 

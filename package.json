@@ -6,10 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-env": "ts-node scripts/check-env.ts",
+    "setup": "ts-node scripts/setup.ts",
+    "setup-db": "ts-node scripts/setup-database.ts",
+    "test-db": "ts-node scripts/test-db-connection.ts",
+    "seed-admin": "ts-node scripts/seed-admin-user.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
+    "@neondatabase/serverless": "latest",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
     "@radix-ui/react-aspect-ratio": "^1.1.1",
@@ -38,14 +44,17 @@
     "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.6",
     "autoprefixer": "^10.4.20",
+    "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
     "date-fns": "^2.28.0",
+    "dotenv": "10",
     "embla-carousel-react": "8.5.1",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
+    "next-auth": "^4.24.11",
     "next-themes": "^0.4.4",
     "react": "^19",
     "react-day-picker": "8.10.1",
@@ -57,9 +66,7 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
-    "zod": "^3.24.1",
-    "@neondatabase/serverless": "latest",
-    "next-auth": "^4.24.11"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^22",
@@ -67,6 +74,7 @@
     "@types/react-dom": "^19",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
+    "ts-node": "10.9.1",
     "typescript": "^5"
   }
 }
