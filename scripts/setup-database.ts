@@ -164,6 +164,93 @@ async function setupDatabase() {
     `)
     console.log("✅ Templates table created.")
 
+    // Agent Templates Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS agent_templates (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        config JSONB NOT NULL,
+        created_by UUID REFERENCES users(id),
+        is_public BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Agent templates table created.")
+
+    // Conversation Tags Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS conversation_tags (
+        conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+        tag VARCHAR(100) NOT NULL,
+        PRIMARY KEY (conversation_id, tag)
+      );
+    `)
+    console.log("✅ Conversation tags table created.")
+
+    // Conversation Analysis Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS conversation_analysis (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+        analysis_type VARCHAR(100) NOT NULL,
+        results JSONB NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Conversation analysis table created.")
+
+    // Sentiment Analysis Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS sentiment_analysis (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        message_id UUID REFERENCES messages(id) ON DELETE CASCADE,
+        sentiment_score REAL NOT NULL,
+        sentiment_label VARCHAR(50) NOT NULL,
+        confidence REAL NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Sentiment analysis table created.")
+
+    // AI Memory Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS ai_memory (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        context JSONB,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ AI memory table created.")
+
+    // Training Jobs Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS training_jobs (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID REFERENCES users(id),
+        model VARCHAR(255) NOT NULL,
+        status VARCHAR(50) DEFAULT 'pending',
+        params JSONB,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Training jobs table created.")
+
+    // System Metrics Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS system_metrics (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        metric_name VARCHAR(255) NOT NULL,
+        metric_value DOUBLE PRECISION NOT NULL,
+        timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ System metrics table created.")
+
     // Create indexes for better performance
     await query(`
       CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON messages(conversation_id);

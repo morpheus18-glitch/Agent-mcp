@@ -113,10 +113,10 @@ The application uses the following database schema:
 - `message_embeddings`: Vector embeddings for messages
 - `conversation_analysis`: Analysis of conversations
 - `sentiment_analysis`: Sentiment analysis of messages
-- `user_memory`: Persistent memory for users
+- `ai_memory`: Persistent memory for users
 - `training_jobs`: Model training jobs
 - `templates`: Templates for conversations and agents
-- `metrics`: Metrics for monitoring
+- `system_metrics`: Metrics for monitoring
 
 ## API Endpoints
 

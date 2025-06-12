@@ -1,7 +1,19 @@
 import { neon } from "@neondatabase/serverless"
+import type { NeonQueryFunction } from "@neondatabase/serverless"
 
 // Create a SQL client
 export const sql = neon(process.env.DATABASE_URL!)
+
+// Provide a wrapper around the neon transaction API so callers receive an
+// object with a `query` method. This matches how our scripts use the helper.
+export async function transaction<T>(
+  fn: (client: { query: NeonQueryFunction }) => Promise<T>,
+): Promise<T> {
+  return sql.transaction((inner) => {
+    const client = { query: inner }
+    return fn(client)
+  })
+}
 
 // Helper function to execute a query
 export async function query(query: string, params: any[] = []) {
@@ -11,6 +23,16 @@ export async function query(query: string, params: any[] = []) {
     console.error("Database query error:", error)
     throw error
   }
+}
+
+// In the serverless client there is no persistent pool, but we expose helpers
+// for API compatibility with code that expects them.
+export function getPool() {
+  return sql
+}
+
+export async function closePool() {
+  // noop for serverless driver
 }
 
 // Type definitions for our database models
