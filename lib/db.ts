@@ -1,16 +1,36 @@
 import { neon } from "@neondatabase/serverless"
 
+// Keep a reference to the client so scripts can reuse or close it
+let client = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null
+
 // Create a SQL client
-export const sql = neon(process.env.DATABASE_URL!)
+export const sql = client!
 
 // Helper function to execute a query
 export async function query(query: string, params: any[] = []) {
   try {
-    return await sql(query, params)
+    if (!client) {
+      throw new Error("DATABASE_URL not set")
+    }
+    return await client.query(query, params)
   } catch (error) {
     console.error("Database query error:", error)
     throw error
   }
+}
+
+// Functions expected by scripts
+export function getPool() {
+  if (!client && process.env.DATABASE_URL) {
+    client = neon(process.env.DATABASE_URL)
+  }
+  return client
+}
+
+export async function closePool() {
+  // Neon serverless does not use persistent connections,
+  // but we clear the reference for completeness.
+  client = null
 }
 
 // Type definitions for our database models
