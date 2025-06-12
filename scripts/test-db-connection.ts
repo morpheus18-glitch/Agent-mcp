@@ -1,5 +1,5 @@
 import { getPool, query, closePool } from "../lib/db"
-import dotenv from "dotenv"
+import * as dotenv from "dotenv"
 
 // Load environment variables
 dotenv.config({ path: ".env.local" })
@@ -9,8 +9,13 @@ async function testConnection() {
     console.log("Testing database connection...")
     console.log("Database URL:", process.env.DATABASE_URL ? "Set (hidden for security)" : "Not set")
 
+    if (!process.env.DATABASE_URL) {
+      console.warn("DATABASE_URL environment variable is not set. Skipping connection tests.")
+      return
+    }
+
     // Test the connection
-    const result = await query("SELECT NOW() as current_time")
+    const result: any = await query("SELECT NOW() as current_time")
     console.log("Connection successful!")
     console.log("Current database time:", result.rows[0].current_time)
 
@@ -23,7 +28,7 @@ async function testConnection() {
     }
 
     // List all tables
-    const tables = await query(`
+    const tables: any = await query(`
       SELECT table_name 
       FROM information_schema.tables 
       WHERE table_schema = 'public'
@@ -34,14 +39,14 @@ async function testConnection() {
     if (tables.rows.length === 0) {
       console.log("No tables found. You may need to run the setup-db script.")
     } else {
-      tables.rows.forEach((row, index) => {
+      tables.rows.forEach((row: any, index: number) => {
         console.log(`${index + 1}. ${row.table_name}`)
       })
 
       // Verify critical tables exist
       const requiredTables = ["users", "conversations"]
       const missingTables = requiredTables.filter(
-        (name) => !tables.rows.some((row) => row.table_name === name)
+        (name) => !tables.rows.some((row: any) => row.table_name === name)
       )
       if (missingTables.length > 0) {
         console.warn(
