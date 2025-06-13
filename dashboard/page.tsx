@@ -21,7 +21,7 @@ export default function DashboardPage() {
               This dashboard provides tools to manage your LLM Sandbox environment. Check your environment configuration
               above to ensure everything is set up correctly.
             </p>
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
               <Button asChild variant="outline">
                 <Link href="/sandbox">Launch Sandbox</Link>
               </Button>
@@ -30,6 +30,9 @@ export default function DashboardPage() {
               </Button>
               <Button asChild variant="outline">
                 <Link href="/settings">Settings</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/avatar">Customize Avatar</Link>
               </Button>
             </div>
           </CardContent>
