@@ -19,6 +19,8 @@ package-lock.json
 
 # env files
 .env*
+!.env.local.example
+docker/postgres.env
 
 # vercel
 .vercel

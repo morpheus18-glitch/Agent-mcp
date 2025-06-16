@@ -16,9 +16,10 @@ The `Assets` folder is where additional scenes and scripts should be placed. The
 ## Overall Setup
 
 1. Install Node.js 18+, then run `pnpm install` to install dependencies.
-2. Create a `.env.local` file (run `pnpm run setup` to generate one) and configure database and API keys.
-3. Start the development server with `pnpm run dev`.
-4. The Django backend resides in `llm_sandbox/` with the usual manage.py commands. Environment variables are loaded via `dotenv`.
-5. The Unity project can be opened with Unity Hub by selecting the `Unity/` directory.
+2. Copy `docker/postgres.env.example` to `docker/postgres.env` and run `docker-compose up -d db` to start a local Postgres instance.
+3. Create a `.env.local` file (run `pnpm run setup` to generate one) and configure database and API keys.
+4. Start the development server with `pnpm run dev`.
+5. The Django backend resides in `llm_sandbox/` with the usual manage.py commands. Environment variables are loaded via `dotenv`.
+6. The Unity project can be opened with Unity Hub by selecting the `Unity/` directory.
 
 For full instructions, see `README.md` at the repository root and `Unity/README.md` for the Unity client.
