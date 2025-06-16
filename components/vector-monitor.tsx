@@ -1,27 +1,36 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
-import { InfoIcon } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import { InfoIcon } from "lucide-react";
 
 interface VectorMetric {
-  id: string
-  name: string
-  value: number
-  target: [number, number] // Min and max target values
-  description: string
+  id: string;
+  name: string;
+  value: number;
+  target: [number, number]; // Min and max target values
+  description: string;
 }
 
 interface VectorHistoryPoint {
-  timestamp: string
-  [key: string]: number | string
+  timestamp: string;
+  [key: string]: number | string;
 }
 
 interface VectorMonitorProps {
-  conversationId: string | null
+  conversationId: string | null;
 }
 
 export default function VectorMonitor({ conversationId }: VectorMonitorProps) {
@@ -75,71 +84,73 @@ export default function VectorMonitor({ conversationId }: VectorMonitorProps) {
       target: [60, 85],
       description: "Measures reusability of emergent conceptual frameworks",
     },
-  ])
+  ]);
 
-  const [history, setHistory] = useState<VectorHistoryPoint[]>([])
-  const [activeTab, setActiveTab] = useState("current")
+  const [history, setHistory] = useState<VectorHistoryPoint[]>([]);
+  const [activeTab, setActiveTab] = useState("current");
 
   useEffect(() => {
-    if (!conversationId) return
+    if (!conversationId) return;
 
-    fetchMetrics()
-    const intervalId = setInterval(fetchMetrics, 5000)
+    fetchMetrics();
+    const intervalId = setInterval(fetchMetrics, 5000);
 
-    return () => clearInterval(intervalId)
-  }, [conversationId])
+    return () => clearInterval(intervalId);
+  }, [conversationId]);
 
   const fetchMetrics = async () => {
-    if (!conversationId) return
+    if (!conversationId) return;
 
     try {
-      const response = await fetch(`/api/conversations/${conversationId}/vectors`)
+      const response = await fetch(
+        `/api/conversations/${conversationId}/vectors`,
+      );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch vector metrics")
+        throw new Error("Failed to fetch vector metrics");
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
       // Update metrics with the fetched data
       const updatedMetrics = metrics.map((metric) => ({
         ...metric,
         value: data[metric.name] || Math.floor(40 + Math.random() * 50), // Fallback to random value
-      }))
+      }));
 
-      setMetrics(updatedMetrics)
+      setMetrics(updatedMetrics);
 
       // Update history
-      const timestamp = new Date().toLocaleTimeString()
-      const historyPoint: VectorHistoryPoint = { timestamp }
+      const timestamp = new Date().toLocaleTimeString();
+      const historyPoint: VectorHistoryPoint = { timestamp };
 
       updatedMetrics.forEach((metric) => {
-        historyPoint[metric.id] = metric.value
-      })
+        historyPoint[metric.id] = metric.value;
+      });
 
       setHistory((prev) => {
-        const newHistory = [...prev, historyPoint]
+        const newHistory = [...prev, historyPoint];
         if (newHistory.length > 20) {
-          return newHistory.slice(newHistory.length - 20)
+          return newHistory.slice(newHistory.length - 20);
         }
-        return newHistory
-      })
+        return newHistory;
+      });
     } catch (error) {
-      console.error("Error fetching vector metrics:", error)
+      console.error("Error fetching vector metrics:", error);
     }
-  }
+  };
 
   const getStatusColor = (value: number, target: [number, number]) => {
-    if (value < target[0]) return "text-amber-500"
-    if (value > target[1]) return "text-red-500"
-    return "text-green-500"
-  }
+    if (value < target[0]) return "text-amber-500";
+    if (value > target[1]) return "text-red-500";
+    return "text-green-500";
+  };
 
   const getProgressColor = (value: number, target: [number, number]) => {
-    if (value < target[0]) return "bg-amber-500"
-    if (value > target[1]) return "bg-red-500"
-    return "bg-green-500"
-  }
+    if (value < target[0]) return "bg-amber-500";
+    if (value > target[1]) return "bg-red-500";
+    return "bg-green-500";
+  };
 
   return (
     <Card>
@@ -151,7 +162,9 @@ export default function VectorMonitor({ conversationId }: VectorMonitorProps) {
               Monitoring conversation {conversationId.substring(0, 8)}...
             </span>
           ) : (
-            <span className="text-sm font-normal text-muted-foreground">No active conversation</span>
+            <span className="text-sm font-normal text-muted-foreground">
+              No active conversation
+            </span>
           )}
         </CardTitle>
       </CardHeader>
@@ -179,14 +192,19 @@ export default function VectorMonitor({ conversationId }: VectorMonitorProps) {
                         </div>
                       </div>
                     </div>
-                    <span className={`text-sm font-bold ${getStatusColor(metric.value, metric.target)}`}>
+                    <span
+                      className={`text-sm font-bold ${getStatusColor(metric.value, metric.target)}`}
+                    >
                       {metric.value}%
                     </span>
                   </div>
                   <Progress
                     value={metric.value}
                     className="h-2"
-                    indicatorClassName={getProgressColor(metric.value, metric.target)}
+                    indicatorClassName={getProgressColor(
+                      metric.value,
+                      metric.target,
+                    )}
                   />
                 </div>
               ))}
@@ -220,5 +238,5 @@ export default function VectorMonitor({ conversationId }: VectorMonitorProps) {
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { AlertTriangle } from "lucide-react"
+import { AlertTriangle } from "lucide-react";
 
 export default function TroubleshootingBanner() {
   return (
@@ -8,10 +8,11 @@ export default function TroubleshootingBanner() {
         <div>
           <p className="font-medium">Authentication is temporarily disabled</p>
           <p className="text-sm">
-            We've temporarily disabled authentication to allow you to explore the sandbox without login.
+            We've temporarily disabled authentication to allow you to explore
+            the sandbox without login.
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

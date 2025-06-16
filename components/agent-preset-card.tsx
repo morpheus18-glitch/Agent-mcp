@@ -1,18 +1,22 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Check, Plus } from "lucide-react"
-import { AgentAvatar } from "@/components/agent-avatar"
-import type { AgentConfig } from "@/types/sandbox"
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Check, Plus } from "lucide-react";
+import { AgentAvatar } from "@/components/agent-avatar";
+import type { AgentConfig } from "@/types/sandbox";
 
 interface AgentPresetCardProps {
-  agent: AgentConfig
-  isSelected: boolean
-  onSelect: () => void
+  agent: AgentConfig;
+  isSelected: boolean;
+  onSelect: () => void;
 }
 
-export function AgentPresetCard({ agent, isSelected, onSelect }: AgentPresetCardProps) {
+export function AgentPresetCard({
+  agent,
+  isSelected,
+  onSelect,
+}: AgentPresetCardProps) {
   return (
     <Card
       className={`cursor-pointer transition-all hover:shadow-md ${isSelected ? "border-primary border-2" : ""}`}
@@ -31,22 +35,32 @@ export function AgentPresetCard({ agent, isSelected, onSelect }: AgentPresetCard
               size="sm"
               className="h-7 px-2"
               onClick={(e) => {
-                e.stopPropagation()
-                onSelect()
+                e.stopPropagation();
+                onSelect();
               }}
             >
-              {isSelected ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+              {isSelected ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
             </Button>
           </div>
 
-          <p className="text-sm text-muted-foreground mt-1">{agent.description || "No description available"}</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {agent.description || "No description available"}
+          </p>
 
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-xs px-2 py-0.5 bg-muted rounded-full">{agent.model}</span>
-            <span className="text-xs px-2 py-0.5 bg-muted rounded-full">{agent.role || "General"}</span>
+            <span className="text-xs px-2 py-0.5 bg-muted rounded-full">
+              {agent.model}
+            </span>
+            <span className="text-xs px-2 py-0.5 bg-muted rounded-full">
+              {agent.role || "General"}
+            </span>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

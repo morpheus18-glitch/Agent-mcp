@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import type { AgentConfig, ConversationSettings } from "@/types/sandbox"
-import { AgentAvatar } from "@/components/agent-avatar"
-import { Play, Pause, RotateCw, X } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import type { AgentConfig, ConversationSettings } from "@/types/sandbox";
+import { AgentAvatar } from "@/components/agent-avatar";
+import { Play, Pause, RotateCw, X } from "lucide-react";
 
 interface ControlPanelProps {
-  agents: AgentConfig[]
-  onRemoveAgent: (agentId: string) => void
-  onStart: () => void
-  onPause: () => void
-  onResume: () => void
-  isRunning: boolean
-  settings?: ConversationSettings | null
+  agents: AgentConfig[];
+  onRemoveAgent: (agentId: string) => void;
+  onStart: () => void;
+  onPause: () => void;
+  onResume: () => void;
+  isRunning: boolean;
+  settings?: ConversationSettings | null;
 }
 
 export default function ControlPanel({
@@ -45,16 +45,20 @@ export default function ControlPanel({
             <h3 className="text-sm font-medium">Conversation Settings</h3>
             <div className="text-sm space-y-1">
               <p>
-                <span className="font-medium">Objective:</span> {settings.objective}
+                <span className="font-medium">Objective:</span>{" "}
+                {settings.objective}
               </p>
               <p>
-                <span className="font-medium">Language:</span> {settings.language}
+                <span className="font-medium">Language:</span>{" "}
+                {settings.language}
               </p>
               <p>
-                <span className="font-medium">Max Turns:</span> {settings.maxTurns}
+                <span className="font-medium">Max Turns:</span>{" "}
+                {settings.maxTurns}
               </p>
               <p>
-                <span className="font-medium">Temperature:</span> {settings.temperature}
+                <span className="font-medium">Temperature:</span>{" "}
+                {settings.temperature}
               </p>
             </div>
 
@@ -76,21 +80,33 @@ export default function ControlPanel({
         )}
 
         <div className="space-y-2">
-          <h3 className="text-sm font-medium">Active Agents ({agents.length})</h3>
+          <h3 className="text-sm font-medium">
+            Active Agents ({agents.length})
+          </h3>
           {agents.length === 0 ? (
             <p className="text-sm text-muted-foreground">No agents added yet</p>
           ) : (
             <div className="space-y-2">
               {agents.map((agent) => (
-                <div key={agent.id} className="flex items-center justify-between p-2 bg-muted/50 rounded-md">
+                <div
+                  key={agent.id}
+                  className="flex items-center justify-between p-2 bg-muted/50 rounded-md"
+                >
                   <div className="flex items-center gap-2">
                     <AgentAvatar agent={agent} size="sm" />
                     <div>
                       <p className="text-sm font-medium">{agent.name}</p>
-                      <p className="text-xs text-muted-foreground">{agent.model}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {agent.model}
+                      </p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => onRemoveAgent(agent.id)} disabled={isRunning}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onRemoveAgent(agent.id)}
+                    disabled={isRunning}
+                  >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
@@ -103,7 +119,11 @@ export default function ControlPanel({
           <h3 className="text-sm font-medium">Conversation Controls</h3>
           <div className="flex gap-2">
             {!isRunning ? (
-              <Button className="flex-1" onClick={agents.length > 0 ? onStart : undefined} disabled={agents.length < 3}>
+              <Button
+                className="flex-1"
+                onClick={agents.length > 0 ? onStart : undefined}
+                disabled={agents.length < 3}
+              >
                 <Play className="mr-2 h-4 w-4" />
                 Start
               </Button>
@@ -113,7 +133,12 @@ export default function ControlPanel({
                 Pause
               </Button>
             )}
-            <Button className="flex-1" variant="outline" onClick={onResume} disabled={!isRunning}>
+            <Button
+              className="flex-1"
+              variant="outline"
+              onClick={onResume}
+              disabled={!isRunning}
+            >
               <RotateCw className="mr-2 h-4 w-4" />
               Resume
             </Button>
@@ -121,5 +146,5 @@ export default function ControlPanel({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,40 +1,40 @@
 // Mock data for the application
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4 } from "uuid";
 
 // Agent type definition
 export interface Agent {
-  id: string
-  name: string
-  model: string
-  avatar: string
-  instructions: string
-  color: string
-  role: string
-  description?: string
+  id: string;
+  name: string;
+  model: string;
+  avatar: string;
+  instructions: string;
+  color: string;
+  role: string;
+  description?: string;
 }
 
 // Message type definition
 export interface Message {
-  id: string
-  conversationId: string
-  agentId: string
-  content: string
-  timestamp: string
+  id: string;
+  conversationId: string;
+  agentId: string;
+  content: string;
+  timestamp: string;
   metadata?: {
-    thinking?: string
-    [key: string]: unknown
-  }
+    thinking?: string;
+    [key: string]: unknown;
+  };
 }
 
 // Conversation type definition
 export interface Conversation {
-  id: string
-  topic: string
-  objective: string
-  systemPrompt?: string
-  messages: Message[]
-  createdAt: string
-  updatedAt: string
+  id: string;
+  topic: string;
+  objective: string;
+  systemPrompt?: string;
+  messages: Message[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Default agents
@@ -72,7 +72,7 @@ export const defaultAgents: Agent[] = [
     role: "economist",
     description: "Analyzes economic trends and policy impacts",
   },
-]
+];
 
 // Mock conversation
 export const mockConversation: Conversation = {
@@ -120,10 +120,14 @@ export const mockConversation: Conversation = {
   ],
   createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
   updatedAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
-}
+};
 
 // Generate a mock conversation
-export function generateMockConversation(agents: Agent[], topic: string, objective: string): Conversation {
+export function generateMockConversation(
+  agents: Agent[],
+  topic: string,
+  objective: string,
+): Conversation {
   const mockMessages: Message[] = [
     {
       id: uuidv4(),
@@ -161,7 +165,7 @@ export function generateMockConversation(agents: Agent[], topic: string, objecti
           "The relationship between interest rates and growth stock valuations is critical here. Need to consider both the direct impact on discount rates and the secondary effects on corporate borrowing costs.",
       },
     },
-  ]
+  ];
 
   return {
     id: uuidv4(),
@@ -170,11 +174,14 @@ export function generateMockConversation(agents: Agent[], topic: string, objecti
     messages: mockMessages,
     createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
     updatedAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
-  }
+  };
 }
 
 // Generate a mock message
-export function generateMockMessage(conversationId: string, agentId: string): Message {
+export function generateMockMessage(
+  conversationId: string,
+  agentId: string,
+): Message {
   return {
     id: uuidv4(),
     conversationId,
@@ -186,5 +193,5 @@ export function generateMockMessage(conversationId: string, agentId: string): Me
       thinking:
         "Need to synthesize the different perspectives here. The technical momentum is strong, but the macroeconomic factors suggest caution. A balanced portfolio approach seems most appropriate.",
     },
-  }
+  };
 }

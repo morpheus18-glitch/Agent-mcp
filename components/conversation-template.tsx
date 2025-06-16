@@ -1,17 +1,27 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Check } from "lucide-react"
-import type { ConversationTemplate as ConversationTemplateType } from "@/types/sandbox"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react";
+import type { ConversationTemplate as ConversationTemplateType } from "@/types/sandbox";
 
 interface ConversationTemplateProps {
-  template: ConversationTemplateType
-  isSelected: boolean
-  onSelect: () => void
+  template: ConversationTemplateType;
+  isSelected: boolean;
+  onSelect: () => void;
 }
 
-export function ConversationTemplate({ template, isSelected, onSelect }: ConversationTemplateProps) {
+export function ConversationTemplate({
+  template,
+  isSelected,
+  onSelect,
+}: ConversationTemplateProps) {
   return (
     <Card
       className={`cursor-pointer transition-all hover:shadow-md ${isSelected ? "border-primary border-2" : ""}`}
@@ -34,5 +44,5 @@ export function ConversationTemplate({ template, isSelected, onSelect }: Convers
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

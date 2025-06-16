@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Menu, X, User, Settings, LogOut } from "lucide-react"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Menu, X, User, Settings, LogOut } from "lucide-react";
 
 // Mock session for development
 const mockSession = {
@@ -22,30 +22,30 @@ const mockSession = {
     email: "user@example.com",
     image: null,
   },
-}
+};
 
 export function Navbar() {
   // Use mock session instead of real session to avoid auth errors
-  const session = mockSession
-  const pathname = usePathname()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const session = mockSession;
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const closeMenu = () => {
-    setIsMenuOpen(false)
-  }
+    setIsMenuOpen(false);
+  };
 
   const handleSignOut = async () => {
     // Mock sign out
-    console.log("Signed out")
-  }
+    console.log("Signed out");
+  };
 
   const isActive = (path: string) => {
-    return pathname === path
-  }
+    return pathname === path;
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -58,7 +58,9 @@ export function Navbar() {
             <Link
               href="/dashboard"
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive("/dashboard") ? "text-primary" : "text-muted-foreground"
+                isActive("/dashboard")
+                  ? "text-primary"
+                  : "text-muted-foreground"
               }`}
             >
               Dashboard
@@ -66,7 +68,9 @@ export function Navbar() {
             <Link
               href="/conversations"
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive("/conversations") ? "text-primary" : "text-muted-foreground"
+                isActive("/conversations")
+                  ? "text-primary"
+                  : "text-muted-foreground"
               }`}
             >
               Conversations
@@ -82,7 +86,9 @@ export function Navbar() {
             <Link
               href="/templates"
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive("/templates") ? "text-primary" : "text-muted-foreground"
+                isActive("/templates")
+                  ? "text-primary"
+                  : "text-muted-foreground"
               }`}
             >
               Templates
@@ -90,7 +96,9 @@ export function Navbar() {
             <Link
               href="/analytics"
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                isActive("/analytics") ? "text-primary" : "text-muted-foreground"
+                isActive("/analytics")
+                  ? "text-primary"
+                  : "text-muted-foreground"
               }`}
             >
               Analytics
@@ -102,11 +110,19 @@ export function Navbar() {
             <div className="flex items-center gap-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Button
+                    variant="ghost"
+                    className="relative h-8 w-8 rounded-full"
+                  >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg?height=32&width=32" alt={session.user?.name || "User"} />
+                      <AvatarImage
+                        src="/placeholder.svg?height=32&width=32"
+                        alt={session.user?.name || "User"}
+                      />
                       <AvatarFallback>
-                        {session.user?.name?.charAt(0) || session.user?.email?.charAt(0) || "U"}
+                        {session.user?.name?.charAt(0) ||
+                          session.user?.email?.charAt(0) ||
+                          "U"}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -114,8 +130,12 @@ export function Navbar() {
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{session.user?.name}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{session.user?.email}</p>
+                      <p className="text-sm font-medium leading-none">
+                        {session.user?.name}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {session.user?.email}
+                      </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -138,7 +158,12 @@ export function Navbar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button variant="default" size="sm" asChild className="hidden md:flex">
+              <Button
+                variant="default"
+                size="sm"
+                asChild
+                className="hidden md:flex"
+              >
                 <Link href="/sandbox">New Conversation</Link>
               </Button>
             </div>
@@ -152,8 +177,18 @@ export function Navbar() {
               </Button>
             </div>
           )}
-          <Button variant="ghost" size="icon" aria-label="Toggle Menu" className="md:hidden" onClick={toggleMenu}>
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle Menu"
+            className="md:hidden"
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </Button>
         </div>
       </div>
@@ -165,7 +200,9 @@ export function Navbar() {
               <Link
                 href="/dashboard"
                 className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive("/dashboard") ? "text-primary" : "text-muted-foreground"
+                  isActive("/dashboard")
+                    ? "text-primary"
+                    : "text-muted-foreground"
                 }`}
                 onClick={closeMenu}
               >
@@ -174,7 +211,9 @@ export function Navbar() {
               <Link
                 href="/conversations"
                 className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive("/conversations") ? "text-primary" : "text-muted-foreground"
+                  isActive("/conversations")
+                    ? "text-primary"
+                    : "text-muted-foreground"
                 }`}
                 onClick={closeMenu}
               >
@@ -192,7 +231,9 @@ export function Navbar() {
               <Link
                 href="/templates"
                 className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive("/templates") ? "text-primary" : "text-muted-foreground"
+                  isActive("/templates")
+                    ? "text-primary"
+                    : "text-muted-foreground"
                 }`}
                 onClick={closeMenu}
               >
@@ -201,7 +242,9 @@ export function Navbar() {
               <Link
                 href="/analytics"
                 className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive("/analytics") ? "text-primary" : "text-muted-foreground"
+                  isActive("/analytics")
+                    ? "text-primary"
+                    : "text-muted-foreground"
                 }`}
                 onClick={closeMenu}
               >
@@ -227,5 +270,5 @@ export function Navbar() {
         </div>
       )}
     </header>
-  )
+  );
 }

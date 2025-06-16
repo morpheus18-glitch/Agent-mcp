@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
 // Helper function to check if a string is a valid URL
 function isValidUrl(string: string) {
   try {
-    new URL(string)
-    return true
+    new URL(string);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
@@ -20,19 +20,19 @@ export async function GET() {
       NEXTAUTH_SECRET: !!process.env.NEXTAUTH_SECRET,
       DATABASE_URL: !!process.env.DATABASE_URL,
       GROQ_API_KEY: !!process.env.GROQ_API_KEY,
-    })
+    });
   }
 
   // Check environment variables
-  const nextAuthUrl = process.env.NEXTAUTH_URL
-  const nextAuthSecret = process.env.NEXTAUTH_SECRET
-  const databaseUrl = process.env.DATABASE_URL
-  const groqApiKey = process.env.GROQ_API_KEY
+  const nextAuthUrl = process.env.NEXTAUTH_URL;
+  const nextAuthSecret = process.env.NEXTAUTH_SECRET;
+  const databaseUrl = process.env.DATABASE_URL;
+  const groqApiKey = process.env.GROQ_API_KEY;
 
   return NextResponse.json({
     NEXTAUTH_URL: nextAuthUrl ? isValidUrl(nextAuthUrl) : false,
     NEXTAUTH_SECRET: !!nextAuthSecret && nextAuthSecret.length >= 32,
     DATABASE_URL: !!databaseUrl && databaseUrl.startsWith("postgres://"),
     GROQ_API_KEY: !!groqApiKey,
-  })
+  });
 }

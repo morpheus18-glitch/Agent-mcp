@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function MainNav() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <nav className="flex items-center space-x-4 lg:space-x-6">
@@ -22,7 +22,9 @@ export function MainNav() {
         href="/dashboard"
         className={cn(
           "text-sm font-medium transition-colors hover:text-primary",
-          pathname === "/dashboard" || pathname.startsWith("/dashboard/") ? "text-primary" : "text-muted-foreground",
+          pathname === "/dashboard" || pathname.startsWith("/dashboard/")
+            ? "text-primary"
+            : "text-muted-foreground",
         )}
       >
         Dashboard
@@ -46,5 +48,5 @@ export function MainNav() {
         Sandbox
       </Link>
     </nav>
-  )
+  );
 }

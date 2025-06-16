@@ -1,56 +1,62 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 // Define a simple Template interface
 interface Template {
-  id: string
-  name: string
-  description: string
-  category: string
-  created_at: string
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  created_at: string;
 }
 
 export default function TemplateList() {
-  const [templates, setTemplates] = useState<Template[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchTemplates() {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
         // Attempt to fetch templates from the API
-        const response = await fetch("/api/templates")
+        const response = await fetch("/api/templates");
 
         // If the API fails, use sample data
         if (!response.ok) {
           // Use sample data instead of throwing an error
-          setTemplates(sampleTemplates)
-          return
+          setTemplates(sampleTemplates);
+          return;
         }
 
-        const data = await response.json()
-        setTemplates(data)
+        const data = await response.json();
+        setTemplates(data);
       } catch (err) {
-        console.error("Error fetching templates:", err)
+        console.error("Error fetching templates:", err);
         // Use sample data on error
-        setTemplates(sampleTemplates)
+        setTemplates(sampleTemplates);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    fetchTemplates()
-  }, [])
+    fetchTemplates();
+  }, []);
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading templates...</div>
+    return <div className="text-center py-8">Loading templates...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500 py-8">Error: {error}</div>
+    return <div className="text-red-500 py-8">Error: {error}</div>;
   }
 
   return (
@@ -76,7 +82,7 @@ export default function TemplateList() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
 
 // Sample template data to use if API fails
@@ -84,7 +90,8 @@ const sampleTemplates: Template[] = [
   {
     id: "1",
     name: "Conversation Analysis",
-    description: "Template for analyzing conversation patterns between multiple agents.",
+    description:
+      "Template for analyzing conversation patterns between multiple agents.",
     category: "Analysis",
     created_at: new Date().toISOString(),
   },
@@ -105,14 +112,16 @@ const sampleTemplates: Template[] = [
   {
     id: "4",
     name: "Customer Support",
-    description: "Template for handling customer inquiries and support requests.",
+    description:
+      "Template for handling customer inquiries and support requests.",
     category: "Support",
     created_at: new Date().toISOString(),
   },
   {
     id: "5",
     name: "Content Creation",
-    description: "Generate blog posts, articles, and other content with AI assistance.",
+    description:
+      "Generate blog posts, articles, and other content with AI assistance.",
     category: "Content",
     created_at: new Date().toISOString(),
   },
@@ -123,4 +132,4 @@ const sampleTemplates: Template[] = [
     category: "Development",
     created_at: new Date().toISOString(),
   },
-]
+];

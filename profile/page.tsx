@@ -1,67 +1,74 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Check } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
-  id: string
-  email: string
-  fullName: string
-  avatarUrl?: string
-  bio?: string
-    preferences?: {
-      theme?: string
-      notifications?: boolean
-      [key: string]: unknown
-    }
+  id: string;
+  email: string;
+  fullName: string;
+  avatarUrl?: string;
+  bio?: string;
+  preferences?: {
+    theme?: string;
+    notifications?: boolean;
+    [key: string]: unknown;
+  };
 }
 
 export default function ProfilePage() {
-  const { data: session, status, update } = useSession()
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSaving, setIsSaving] = useState(false)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
-  const { toast } = useToast()
+  const { data: session, status, update } = useSession();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const { toast } = useToast();
 
   // Safely update a profile field
-    const updateProfileField = (field: keyof UserProfile, value: unknown) => {
-    if (!profile) return
+  const updateProfileField = (field: keyof UserProfile, value: unknown) => {
+    if (!profile) return;
     setProfile({
       ...profile,
       [field]: value,
-    })
-  }
+    });
+  };
 
   // Safely update a preference
-    const updatePreference = (key: string, value: unknown) => {
-    if (!profile) return
+  const updatePreference = (key: string, value: unknown) => {
+    if (!profile) return;
     setProfile({
       ...profile,
       preferences: {
         ...(profile.preferences || {}),
         [key]: value,
       },
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      redirect("/login")
+      redirect("/login");
     }
 
     if (status === "authenticated" && session?.user) {
@@ -76,20 +83,20 @@ export default function ProfilePage() {
           theme: "system",
           notifications: true,
         },
-      }
+      };
 
-      setProfile(mockProfile)
-      setIsLoading(false)
+      setProfile(mockProfile);
+      setIsLoading(false);
     }
-  }, [status, session])
+  }, [status, session]);
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!profile) return
+    e.preventDefault();
+    if (!profile) return;
 
-    setIsSaving(true)
-    setError("")
-    setSuccess("")
+    setIsSaving(true);
+    setError("");
+    setSuccess("");
 
     try {
       // In a real app, send the profile update to the API
@@ -100,7 +107,7 @@ export default function ProfilePage() {
       // });
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Update the session
       if (session) {
@@ -110,31 +117,31 @@ export default function ProfilePage() {
             ...session.user,
             name: profile.fullName,
           },
-        })
+        });
       }
 
-      setSuccess("Profile updated successfully")
+      setSuccess("Profile updated successfully");
       toast({
         title: "Profile updated",
         description: "Your profile has been updated successfully.",
-      })
-      } catch {
-        setError("Failed to update profile")
-        toast({
+      });
+    } catch {
+      setError("Failed to update profile");
+      toast({
         title: "Error",
         description: "Failed to update profile. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSaving(true)
-    setError("")
-    setSuccess("")
+    e.preventDefault();
+    setIsSaving(true);
+    setError("");
+    setSuccess("");
 
     try {
       // In a real app, send the password update to the API
@@ -148,24 +155,24 @@ export default function ProfilePage() {
       // });
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      setSuccess("Password updated successfully")
+      setSuccess("Password updated successfully");
       toast({
         title: "Password updated",
         description: "Your password has been updated successfully.",
-      })
-      } catch {
-        setError("Failed to update password")
-        toast({
+      });
+    } catch {
+      setError("Failed to update password");
+      toast({
         title: "Error",
         description: "Failed to update password. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   if (status === "loading" || isLoading) {
     return (
@@ -175,7 +182,7 @@ export default function ProfilePage() {
           <p className="text-sm text-muted-foreground">Loading profile...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!profile) {
@@ -183,10 +190,12 @@ export default function ProfilePage() {
       <div className="container py-8">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>Failed to load profile information. Please try again later.</AlertDescription>
+          <AlertDescription>
+            Failed to load profile information. Please try again later.
+          </AlertDescription>
         </Alert>
       </div>
-    )
+    );
   }
 
   return (
@@ -196,13 +205,22 @@ export default function ProfilePage() {
           <Card>
             <CardHeader>
               <CardTitle>Profile</CardTitle>
-              <CardDescription>Manage your personal information and preferences</CardDescription>
+              <CardDescription>
+                Manage your personal information and preferences
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-4">
               <Avatar className="h-24 w-24">
-                <AvatarImage src={profile.avatarUrl || "/placeholder.svg?height=96&width=96"} alt={profile.fullName} />
+                <AvatarImage
+                  src={
+                    profile.avatarUrl || "/placeholder.svg?height=96&width=96"
+                  }
+                  alt={profile.fullName}
+                />
                 <AvatarFallback className="text-2xl">
-                  {profile.fullName?.charAt(0) || profile.email?.charAt(0) || "U"}
+                  {profile.fullName?.charAt(0) ||
+                    profile.email?.charAt(0) ||
+                    "U"}
                 </AvatarFallback>
               </Avatar>
               <div className="text-center">
@@ -223,7 +241,9 @@ export default function ProfilePage() {
               <Card>
                 <CardHeader>
                   <CardTitle>General Information</CardTitle>
-                  <CardDescription>Update your personal information</CardDescription>
+                  <CardDescription>
+                    Update your personal information
+                  </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleProfileUpdate}>
                   <CardContent className="space-y-4">
@@ -236,7 +256,9 @@ export default function ProfilePage() {
                     {success && (
                       <Alert className="bg-green-50 border-green-500">
                         <Check className="h-4 w-4 text-green-500" />
-                        <AlertDescription className="text-green-700">{success}</AlertDescription>
+                        <AlertDescription className="text-green-700">
+                          {success}
+                        </AlertDescription>
                       </Alert>
                     )}
                     <div className="space-y-2">
@@ -244,20 +266,31 @@ export default function ProfilePage() {
                       <Input
                         id="fullName"
                         value={profile.fullName}
-                        onChange={(e) => updateProfileField("fullName", e.target.value)}
+                        onChange={(e) =>
+                          updateProfileField("fullName", e.target.value)
+                        }
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" value={profile.email} disabled />
-                      <p className="text-xs text-muted-foreground">Email address cannot be changed</p>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={profile.email}
+                        disabled
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Email address cannot be changed
+                      </p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="bio">Bio</Label>
                       <Textarea
                         id="bio"
                         value={profile.bio || ""}
-                        onChange={(e) => updateProfileField("bio", e.target.value)}
+                        onChange={(e) =>
+                          updateProfileField("bio", e.target.value)
+                        }
                         rows={4}
                       />
                     </div>
@@ -274,7 +307,9 @@ export default function ProfilePage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Change Password</CardTitle>
-                  <CardDescription>Update your password to keep your account secure</CardDescription>
+                  <CardDescription>
+                    Update your password to keep your account secure
+                  </CardDescription>
                 </CardHeader>
                 <form onSubmit={handlePasswordUpdate}>
                   <CardContent className="space-y-4">
@@ -286,12 +321,14 @@ export default function ProfilePage() {
                       <Label htmlFor="newPassword">New Password</Label>
                       <Input id="newPassword" type="password" />
                       <p className="text-xs text-muted-foreground">
-                        Password must be at least 8 characters and include uppercase, lowercase, number, and special
-                        character.
+                        Password must be at least 8 characters and include
+                        uppercase, lowercase, number, and special character.
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                      <Label htmlFor="confirmPassword">
+                        Confirm New Password
+                      </Label>
                       <Input id="confirmPassword" type="password" />
                     </div>
                   </CardContent>
@@ -316,7 +353,9 @@ export default function ProfilePage() {
                       id="theme"
                       className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                       value={profile.preferences?.theme || "system"}
-                      onChange={(e) => updatePreference("theme", e.target.value)}
+                      onChange={(e) =>
+                        updatePreference("theme", e.target.value)
+                      }
                     >
                       <option value="light">Light</option>
                       <option value="dark">Dark</option>
@@ -325,7 +364,11 @@ export default function ProfilePage() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button type="button" onClick={handleProfileUpdate} disabled={isSaving}>
+                  <Button
+                    type="button"
+                    onClick={handleProfileUpdate}
+                    disabled={isSaving}
+                  >
                     {isSaving ? "Saving..." : "Save Preferences"}
                   </Button>
                 </CardFooter>
@@ -335,5 +378,5 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,16 +1,22 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import type { AgentConfig } from "@/types/sandbox"
-import { generateId } from "@/lib/utils"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import type { AgentConfig } from "@/types/sandbox";
+import { generateId } from "@/lib/utils";
 
 const AVAILABLE_MODELS = [
   { id: "llama3-8b", name: "Llama 3 8B" },
@@ -18,34 +24,38 @@ const AVAILABLE_MODELS = [
   { id: "mistral-7b", name: "Mistral 7B" },
   { id: "phi-3", name: "Phi-3" },
   { id: "gemma-7b", name: "Gemma 7B" },
-]
+];
 
 const AVATAR_OPTIONS = [
   { id: "robot", name: "Robot", description: "A mechanical assistant" },
   { id: "scientist", name: "Scientist", description: "A knowledge explorer" },
   { id: "assistant", name: "Assistant", description: "A helpful guide" },
-  { id: "detective", name: "Detective", description: "An analytical investigator" },
+  {
+    id: "detective",
+    name: "Detective",
+    description: "An analytical investigator",
+  },
   { id: "philosopher", name: "Philosopher", description: "A deep thinker" },
   { id: "wizard", name: "Wizard", description: "A magical entity" },
   { id: "alien", name: "Alien", description: "An otherworldly being" },
   { id: "explorer", name: "Explorer", description: "An adventurous traveler" },
-]
+];
 
 interface ModelSelectorProps {
-  onAddAgent: (agent: AgentConfig) => void
+  onAddAgent: (agent: AgentConfig) => void;
 }
 
 export default function ModelSelector({ onAddAgent }: ModelSelectorProps) {
-  const [name, setName] = useState("")
-  const [model, setModel] = useState("")
-  const [avatar, setAvatar] = useState("")
-  const [instructions, setInstructions] = useState("")
-  const [color, setColor] = useState("#6366F1")
+  const [name, setName] = useState("");
+  const [model, setModel] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [instructions, setInstructions] = useState("");
+  const [color, setColor] = useState("#6366F1");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!name || !model || !avatar || !instructions) return
+    if (!name || !model || !avatar || !instructions) return;
 
     const newAgent: AgentConfig = {
       id: generateId(),
@@ -54,17 +64,17 @@ export default function ModelSelector({ onAddAgent }: ModelSelectorProps) {
       avatar,
       instructions,
       color,
-    }
+    };
 
-    onAddAgent(newAgent)
+    onAddAgent(newAgent);
 
     // Reset form
-    setName("")
-    setModel("")
-    setAvatar("")
-    setInstructions("")
-    setColor("#6366F1")
-  }
+    setName("");
+    setModel("");
+    setAvatar("");
+    setInstructions("");
+    setColor("#6366F1");
+  };
 
   return (
     <Card>
@@ -111,7 +121,9 @@ export default function ModelSelector({ onAddAgent }: ModelSelectorProps) {
                   <SelectItem key={option.id} value={option.id}>
                     <div className="flex items-center gap-2">
                       <span>{option.name}</span>
-                      <span className="text-xs text-muted-foreground">- {option.description}</span>
+                      <span className="text-xs text-muted-foreground">
+                        - {option.description}
+                      </span>
                     </div>
                   </SelectItem>
                 ))}
@@ -151,5 +163,5 @@ export default function ModelSelector({ onAddAgent }: ModelSelectorProps) {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

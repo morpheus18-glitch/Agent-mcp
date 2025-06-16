@@ -1,41 +1,48 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import type { Algorithm } from "@/types/database"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import type { Algorithm } from "@/types/database";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 export default function AlgorithmList() {
-  const [algorithms, setAlgorithms] = useState<Algorithm[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [algorithms, setAlgorithms] = useState<Algorithm[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchAlgorithms() {
       try {
-        const response = await fetch("/api/algorithms")
+        const response = await fetch("/api/algorithms");
         if (!response.ok) {
-          throw new Error("Failed to fetch algorithms")
+          throw new Error("Failed to fetch algorithms");
         }
-        const data = await response.json()
-        setAlgorithms(data)
+        const data = await response.json();
+        setAlgorithms(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred")
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    fetchAlgorithms()
-  }, [])
+    fetchAlgorithms();
+  }, []);
 
   if (isLoading) {
-    return <div className="flex justify-center p-4">Loading algorithms...</div>
+    return <div className="flex justify-center p-4">Loading algorithms...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500 p-4">Error: {error}</div>
+    return <div className="text-red-500 p-4">Error: {error}</div>;
   }
 
   return (
@@ -74,5 +81,5 @@ export default function AlgorithmList() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

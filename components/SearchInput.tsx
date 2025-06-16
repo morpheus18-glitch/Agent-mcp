@@ -1,36 +1,41 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Input } from "@/components/ui/input"
-import { Search, X } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Search, X } from "lucide-react";
 
 interface SearchInputProps {
-  placeholder?: string
-  value: string
-  onChange: (value: string) => void
-  className?: string
+  placeholder?: string;
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
 }
 
-export default function SearchInput({ placeholder = "Search...", value, onChange, className = "" }: SearchInputProps) {
-  const [inputValue, setInputValue] = useState(value)
+export default function SearchInput({
+  placeholder = "Search...",
+  value,
+  onChange,
+  className = "",
+}: SearchInputProps) {
+  const [inputValue, setInputValue] = useState(value);
 
   // Update local state when prop value changes
   useEffect(() => {
-    setInputValue(value)
-  }, [value])
+    setInputValue(value);
+  }, [value]);
 
   // Debounce the input value
   useEffect(() => {
     const timer = setTimeout(() => {
-      onChange(inputValue)
-    }, 300)
+      onChange(inputValue);
+    }, 300);
 
-    return () => clearTimeout(timer)
-  }, [inputValue, onChange])
+    return () => clearTimeout(timer);
+  }, [inputValue, onChange]);
 
   function handleClear() {
-    setInputValue("")
-    onChange("")
+    setInputValue("");
+    onChange("");
   }
 
   return (
@@ -53,5 +58,5 @@ export default function SearchInput({ placeholder = "Search...", value, onChange
         </button>
       )}
     </div>
-  )
+  );
 }
