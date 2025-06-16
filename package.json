@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "format": "prettier --write .",
     "check-env": "ts-node scripts/check-env.ts",
     "setup": "ts-node scripts/setup.ts",
     "setup-db": "ts-node scripts/setup-database.ts",
@@ -76,5 +77,13 @@
     "tailwindcss": "^3.4.17",
     "ts-node": "10.9.1",
     "typescript": "^5"
+    ,
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "@typescript-eslint/parser": "^6.7.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.2.5"
   }
 }
