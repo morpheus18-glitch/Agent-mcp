@@ -147,6 +147,21 @@ The application provides the following API endpoints:
 - `/api/training/*`: Model training
 - `/api/metrics`: Prometheus metrics
 
+## Unity Character Customization
+
+The front end integrates a Unity WebGL build to allow rich avatar customization.
+Place your exported Unity build files under `public/unity/Build/`. The
+`Avatar Customization` page (`/avatar`) loads the build and sends initialization
+messages to Unity for character setup. To create your own build:
+
+1. Open the Unity project of your choice.
+2. Export a WebGL build and set the output directory to `public/unity/Build`.
+3. Ensure the main scene listens for messages from JavaScript (e.g., a
+   `CharacterManager` object with a `SetInitialAppearance` method).
+
+After exporting, run the Next.js development server and navigate to
+`http://localhost:3000/avatar` to customize your character.
+
 ## Troubleshooting
 
 ### NextAuth.js Errors
