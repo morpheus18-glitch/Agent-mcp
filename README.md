@@ -176,7 +176,7 @@ If you have issues connecting to the database:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the [MIT License](LICENSE).
 
 ## Let's add types for NextAuth:
 The application extends NextAuth.js types so `session.user` includes `id` and `role`. The declarations live in `types/next-auth.d.ts`:
