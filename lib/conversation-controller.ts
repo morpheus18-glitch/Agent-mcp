@@ -55,7 +55,7 @@ export async function startConversation(
   })
 
   // Create A2A conversation
-  const a2aConversationId = a2aProtocol.createConversation(
+  a2aProtocol.createConversation(
     topic,
     agents.map((a) => a.id),
   )
@@ -249,14 +249,7 @@ export async function continueConversation(conversation: Conversation, nextAgent
   return newMessage
 }
 
-function formatConversationHistory(messages: Message[], currentAgentId: string): string {
-  return messages
-    .map((msg) => {
-      const sender = msg.agentId === currentAgentId ? "You" : `Agent ${msg.agentId.substring(0, 4)}`
-      return `${sender}: ${msg.content}`
-    })
-    .join("\n\n")
-}
+
 
 export async function queryConversation(conversationId: string, queryText: string): Promise<string> {
   // Use MCP for querying the conversation

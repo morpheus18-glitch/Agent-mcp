@@ -142,7 +142,7 @@ export async function getCognitiveAnalysisHistory(conversationId: number) {
 }
 
 // Calculate cognitive trajectory (how dimensions change over time)
-export function calculateCognitiveTrajectory(history: any[]) {
+export function calculateCognitiveTrajectory(history: unknown[]) {
   if (history.length < 2) {
     return null
   }
@@ -166,7 +166,7 @@ export function calculateCognitiveTrajectory(history: any[]) {
 }
 
 // Detect cognitive shifts (significant changes in thinking patterns)
-export function detectCognitiveShifts(trajectory: any[], threshold = 0.3) {
+export function detectCognitiveShifts(trajectory: unknown[], threshold = 0.3) {
   if (!trajectory) {
     return []
   }

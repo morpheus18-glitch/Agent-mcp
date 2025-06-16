@@ -17,7 +17,7 @@ export interface Message {
   metadata?: {
     thinking?: string
     agent?: AgentConfig
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -34,7 +34,7 @@ export interface Conversation {
 export interface ConversationQuery {
   type: string
   query: string
-  results: any
+  results: unknown
   timestamp: string
   vectorMetrics?: VectorMetrics
 }

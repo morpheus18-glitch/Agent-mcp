@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Slider } from "@/components/ui/slider"
 import { Save, Undo, Redo } from "lucide-react"
 
-export function CharacterCreator({ onSave, initialCustomization = null }) {
+export function CharacterCreator({ onSave }: { onSave: (data: Record<string, unknown>) => void; initialCustomization?: Record<string, unknown> | null }) {
   const [activeTab, setActiveTab] = useState("basic")
 
   // Character customization state

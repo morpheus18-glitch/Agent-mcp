@@ -35,7 +35,7 @@ export default function TodoForm({ todo, userId, onSuccess }: TodoFormProps) {
     },
   })
 
-  async function onSubmit(data: any) {
+  async function onSubmit(data: Record<string, unknown>) {
     try {
       setIsSubmitting(true)
       setError(null)

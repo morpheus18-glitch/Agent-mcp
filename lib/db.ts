@@ -31,7 +31,7 @@ export async function transaction<T>(
 }
 
 // Helper function to execute a query
-export async function query(query: string, params: any[] = []) {
+export async function query(query: string, params: unknown[] = []) {
   try {
     const sql = getSqlClient()
     return await sql(query, params)
@@ -58,7 +58,7 @@ export interface Conversation {
   template_id: number | null
   agent_id: number | null
   status: string
-  settings: Record<string, any>
+  settings: Record<string, unknown>
   created_at: Date
   updated_at: Date
   last_activity: Date
@@ -75,6 +75,6 @@ export interface ConversationMessage {
 export interface ConversationVector {
   id: string // UUID
   conversation_id: string // UUID
-  vector_data: Record<string, any>
+  vector_data: Record<string, unknown>
   created_at: Date
 }

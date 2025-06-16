@@ -24,7 +24,7 @@ export interface A2AAgent {
     color?: string
     expertise?: string[]
     personality?: string[]
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -42,7 +42,7 @@ export interface A2AMessage {
     expiresAt?: string
     requiresResponse?: boolean
     inResponseTo?: string
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -63,7 +63,7 @@ export interface A2ATask {
     progress?: number
     dependencies?: string[]
     subtasks?: string[]
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -80,7 +80,7 @@ export interface A2AConversation {
   metadata?: {
     topic?: string
     objective?: string
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 

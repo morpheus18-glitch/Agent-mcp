@@ -46,7 +46,7 @@ export async function createOrchestrationModel() {
 }
 
 // Train the model with conversation data
-export async function trainModel(model: tf.Sequential, data: any[], labels: any[]) {
+export async function trainModel(model: tf.Sequential, data: unknown[], labels: unknown[]) {
   // Convert data to tensors
   const xs = tf.tensor2d(data)
   const ys = tf.tensor2d(labels)

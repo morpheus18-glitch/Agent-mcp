@@ -1,4 +1,4 @@
-import { getPool, query, closePool } from "../lib/db"
+import { query, closePool } from "../lib/db"
 import dotenv from "dotenv"
 
 // Load environment variables
@@ -18,9 +18,9 @@ async function testConnection() {
     try {
       await query("SELECT * FROM pg_extension WHERE extname = 'vector'")
       console.log("Vector extension is installed.")
-    } catch (error) {
-      console.warn("Vector extension is not installed or accessible.")
-    }
+  } catch {
+    console.warn("Vector extension is not installed or accessible.")
+  }
 
     // List all tables
     const tables = await query(`
