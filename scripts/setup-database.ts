@@ -16,8 +16,9 @@ async function setupDatabase() {
     try {
       await query("CREATE EXTENSION IF NOT EXISTS vector;")
       console.log("✅ Vector extension enabled successfully.")
-    } catch (error) {
-      console.warn("⚠️ Warning: Could not enable vector extension. Some features may not work:", error.message)
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.warn("⚠️ Warning: Could not enable vector extension. Some features may not work:", message)
       console.warn("You may need to enable the vector extension in your Neon dashboard.")
     }
 
@@ -131,8 +132,9 @@ async function setupDatabase() {
         CREATE INDEX IF NOT EXISTS idx_message_embeddings_vector ON message_embeddings USING ivfflat (embedding vector_cosine_ops);
       `)
       console.log("✅ Vector indexes created.")
-    } catch (error) {
-      console.warn("⚠️ Warning: Could not create vector-dependent tables:", error.message)
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.warn("⚠️ Warning: Could not create vector-dependent tables:", message)
       console.warn("Creating alternative tables without vector support...")
 
       // Create alternative tables without vector support
@@ -369,7 +371,7 @@ async function setupDatabase() {
     console.log("✅ Indexes created.")
 
     console.log("\n🎉 Database setup completed successfully!")
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("❌ Error setting up database:", error)
     throw error
   } finally {
