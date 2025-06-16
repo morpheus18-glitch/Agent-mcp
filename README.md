@@ -157,6 +157,16 @@ If you have issues connecting to the database:
 3. Check that your IP is allowed to connect to the database
 4. Run `pnpm run test-db` to test the connection
 
+## Unity Client Build Instructions
+
+The `UnityClient` folder contains a minimal Unity project that interfaces with the Django backend. Open the folder with **Unity Hub** and let Unity generate missing project files. You may also create it via:
+
+```bash
+unity -createProject UnityClient
+```
+
+After opening the project, use the scripts in `Assets/Scripts` to perform REST and WebSocket calls. Select **File → Build Settings...** in Unity, choose a target platform, and press **Build** to compile the client.
+
 ## Contributing
 
 1. Fork the repository

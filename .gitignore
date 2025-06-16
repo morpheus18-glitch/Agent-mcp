@@ -26,3 +26,10 @@ package-lock.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Unity project
+/UnityClient/Library/
+/UnityClient/Temp/
+/UnityClient/Logs/
+/UnityClient/obj/
+/UnityClient/Build/
+/UnityClient/Builds/
