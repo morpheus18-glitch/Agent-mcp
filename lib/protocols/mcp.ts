@@ -28,20 +28,20 @@ export interface MCPContext {
     topP?: number
     frequencyPenalty?: number
     presencePenalty?: number
-    [key: string]: any
+    [key: string]: unknown
   }
 
   // Memory management
   memory: {
-    shortTerm: any[]
-    longTerm?: any[]
-    episodic?: any[]
-    semantic?: any[]
+    shortTerm: unknown[]
+    longTerm?: unknown[]
+    episodic?: unknown[]
+    semantic?: unknown[]
   }
 
   // System state
   systemState?: {
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 
@@ -58,7 +58,7 @@ export interface MCPMessage {
     confidence?: number
     sentiment?: string
     tokens?: number
-    [key: string]: any
+    [key: string]: unknown
   }
 
   // References to other messages
@@ -89,21 +89,21 @@ export interface MCPResponse {
     promptTokens: number
     totalTokens: number
     latency: number
-    [key: string]: any
+    [key: string]: unknown
   }
 
   // Function calls or tool use
   functionCalls?: {
     name: string
-    arguments: any
-    result?: any
+    arguments: unknown
+    result?: unknown
   }[]
 
   // Error handling
   error?: {
     code: string
     message: string
-    details?: any
+    details?: unknown
   }
 }
 

@@ -98,7 +98,7 @@ export default function RegisterPage() {
 
       // Redirect to login page on successful registration
       router.push("/login?registered=true")
-    } catch (error) {
+    } catch {
       setError("An unexpected error occurred")
       setIsLoading(false)
     }

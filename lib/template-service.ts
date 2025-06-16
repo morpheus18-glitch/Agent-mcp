@@ -6,7 +6,7 @@ export interface Template {
   name: string
   description: string
   category: string
-  content: any
+  content: unknown
   tags: string[]
   created_by: number
   is_public: boolean
@@ -59,7 +59,7 @@ export async function updateTemplate(
   try {
     // Build the SET clause dynamically based on provided fields
     const updates: string[] = []
-    const values: any[] = []
+    const values: unknown[] = []
     let paramIndex = 1
 
     if (template.name !== undefined) {
@@ -145,7 +145,7 @@ export async function searchTemplates(options: {
 
     // Build the WHERE clause
     const conditions: string[] = []
-    const values: any[] = []
+    const values: unknown[] = []
     let paramIndex = 1
 
     // Filter by user ID and public status

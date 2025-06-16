@@ -22,11 +22,11 @@ interface UserProfile {
   fullName: string
   avatarUrl?: string
   bio?: string
-  preferences?: {
-    theme?: string
-    notifications?: boolean
-    [key: string]: any
-  }
+    preferences?: {
+      theme?: string
+      notifications?: boolean
+      [key: string]: unknown
+    }
 }
 
 export default function ProfilePage() {
@@ -39,7 +39,7 @@ export default function ProfilePage() {
   const { toast } = useToast()
 
   // Safely update a profile field
-  const updateProfileField = (field: keyof UserProfile, value: any) => {
+    const updateProfileField = (field: keyof UserProfile, value: unknown) => {
     if (!profile) return
     setProfile({
       ...profile,
@@ -48,7 +48,7 @@ export default function ProfilePage() {
   }
 
   // Safely update a preference
-  const updatePreference = (key: string, value: any) => {
+    const updatePreference = (key: string, value: unknown) => {
     if (!profile) return
     setProfile({
       ...profile,
@@ -118,9 +118,9 @@ export default function ProfilePage() {
         title: "Profile updated",
         description: "Your profile has been updated successfully.",
       })
-    } catch (error) {
-      setError("Failed to update profile")
-      toast({
+      } catch {
+        setError("Failed to update profile")
+        toast({
         title: "Error",
         description: "Failed to update profile. Please try again.",
         variant: "destructive",
@@ -155,9 +155,9 @@ export default function ProfilePage() {
         title: "Password updated",
         description: "Your password has been updated successfully.",
       })
-    } catch (error) {
-      setError("Failed to update password")
-      toast({
+      } catch {
+        setError("Failed to update password")
+        toast({
         title: "Error",
         description: "Failed to update password. Please try again.",
         variant: "destructive",

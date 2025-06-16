@@ -36,7 +36,7 @@ export default function EnvSetup() {
         type: "success",
         text: "Environment variables have been saved. Please restart the server for changes to take effect.",
       })
-    } catch (error) {
+    } catch {
       setMessage({
         type: "error",
         text: "Failed to save environment variables. Please try again.",

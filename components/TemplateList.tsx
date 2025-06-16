@@ -16,7 +16,6 @@ interface Template {
 export default function TemplateList() {
   const [templates, setTemplates] = useState<Template[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchTemplates() {

@@ -23,10 +23,10 @@ interface Message {
   agentId: string
   content: string
   timestamp: string
-  metadata?: {
-    thinking?: string
-    [key: string]: any
-  }
+    metadata?: {
+      thinking?: string
+      [key: string]: unknown
+    }
 }
 
 // Conversation type definition
@@ -51,21 +51,16 @@ export default function World3D({
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null)
   const [showCharacterCreator, setShowCharacterCreator] = useState(false)
   const [editingAgent, setEditingAgent] = useState<Agent | null>(null)
-  const [customCharacters, setCustomCharacters] = useState<Record<string, any>>({})
+  const [customCharacters, setCustomCharacters] = useState<Record<string, unknown>>({})
 
   // Handle agent selection
   const handleAgentClick = (agentId: string) => {
     setSelectedAgent(agentId)
   }
 
-  // Edit character
-  const handleEditCharacter = (agent: Agent) => {
-    setEditingAgent(agent)
-    setShowCharacterCreator(true)
-  }
 
   // Save character customization
-  const handleSaveCharacter = (customization) => {
+  const handleSaveCharacter = (customization: Record<string, unknown>) => {
     if (editingAgent) {
       // Set the name to match the agent
       customization.name = editingAgent.name
@@ -87,23 +82,7 @@ export default function World3D({
       <div className="w-full h-[600px] rounded-lg overflow-hidden border relative bg-gray-50 p-4">
         <h2 className="text-2xl font-bold mb-4">Character Creator</h2>
         <p className="text-muted-foreground mb-6">Customize the appearance of {editingAgent?.name}</p>
-        <CharacterCreator
-          onSave={handleSaveCharacter}
-          initialCustomization={
-            customCharacters[editingAgent?.id || ""] || {
-              name: editingAgent?.name || "Agent",
-              skinColor: "#e0b69e",
-              hairColor: editingAgent?.color || "#3d2314",
-              eyeColor: "#2f5d8a",
-              outfit: {
-                top: editingAgent?.color || "#4a6fa5",
-                bottom: "#2d3748",
-                shoes: "#1a202c",
-                accessories: "#d69e2e",
-              },
-            }
-          }
-        />
+        <CharacterCreator onSave={handleSaveCharacter} />
         <Button
           variant="outline"
           className="absolute top-4 right-4"

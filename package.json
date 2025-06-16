@@ -6,12 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "check-env": "ts-node scripts/check-env.ts",
     "setup": "ts-node scripts/setup.ts",
     "setup-db": "ts-node scripts/setup-database.ts",
     "test-db": "ts-node scripts/test-db-connection.ts",
-    "seed-admin": "ts-node scripts/seed-admin-user.ts"
+    "seed-admin": "ts-node scripts/seed-admin-user.ts",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -69,12 +69,18 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.29.0",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-react": "^7.37.5",
     "postcss": "^8",
+    "prettier": "^3.5.3",
     "tailwindcss": "^3.4.17",
     "ts-node": "10.9.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.34.0"
   }
 }

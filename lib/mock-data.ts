@@ -22,7 +22,7 @@ export interface Message {
   timestamp: string
   metadata?: {
     thinking?: string
-    [key: string]: any
+    [key: string]: unknown
   }
 }
 

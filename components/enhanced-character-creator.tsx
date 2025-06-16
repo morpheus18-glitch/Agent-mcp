@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { SketchPicker } from "react-color"
-import { useMediaQuery } from "@/hooks/use-mobile"
 import {
   Loader2,
   Save,
@@ -37,8 +36,7 @@ import { cn } from "@/lib/utils"
 // Character model component with enhanced features
 function CharacterModel({ customization, position = [0, 0, 0], rotation = [0, 0, 0], scale = 1 }) {
   const group = useRef()
-  const { scene, nodes, materials, animations } = useGLTF("/models/character-base.glb")
-  const { camera } = useThree()
+  const { nodes, materials } = useGLTF("/models/character-base.glb")
 
   // Apply customizations to the model
   useEffect(() => {
@@ -189,7 +187,7 @@ function Turntable({ children, speed = 0.005, autoRotate = false, enabled = true
 }
 
 // Camera controller
-function CameraController({ zoom, setZoom, target, setTarget, position, setPosition }) {
+function CameraController({ target, setTarget, position, setPosition }) {
   const { camera, gl } = useThree()
   const controlsRef = useRef()
 
@@ -217,7 +215,7 @@ function CameraController({ zoom, setZoom, target, setTarget, position, setPosit
       maxDistance={10}
       minPolarAngle={0}
       maxPolarAngle={Math.PI / 1.5}
-      onChange={(e) => {
+        onChange={() => {
         setPosition([camera.position.x, camera.position.y, camera.position.z])
         setTarget([controlsRef.current.target.x, controlsRef.current.target.y, controlsRef.current.target.z])
       }}
@@ -296,42 +294,15 @@ function AccessoryItem({ accessory, isSelected, onToggle }) {
   )
 }
 
-// Outfit style component
-function OutfitStyle({ style, isSelected, onClick, color }) {
-  return (
-    <div
-      className={cn(
-        "cursor-pointer p-2 rounded-md",
-        isSelected ? "bg-primary/20 border border-primary" : "bg-muted hover:bg-muted/80",
-      )}
-      onClick={onClick}
-    >
-      <div className="w-24 h-24 relative">
-        <Canvas>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <mesh position={[0, 0, 0]} scale={[0.5, 0.5, 0.5]}>
-            <boxGeometry args={[1, 2, 0.5]} />
-            <meshStandardMaterial color={color || "#4a6fa5"} />
-          </mesh>
-          <OrbitControls enableZoom={false} enablePan={false} />
-        </Canvas>
-      </div>
-      <p className="text-center text-sm mt-1">{style.name}</p>
-    </div>
-  )
-}
 
 // Main enhanced character creator component
 export default function EnhancedCharacterCreator({ onSave, initialCustomization = null }) {
-  const isMobile = useMediaQuery("(max-width: 768px)")
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("presets")
   const [autoRotate, setAutoRotate] = useState(false)
   const [showWireframe, setShowWireframe] = useState(false)
   const [cameraPosition, setCameraPosition] = useState([0, 1.5, 4])
   const [cameraTarget, setCameraTarget] = useState([0, 0, 0])
-  const [cameraZoom, setCameraZoom] = useState(1)
   const [viewMode, setViewMode] = useState("full") // full, head, body, outfit
 
   // Character customization state with expanded options
@@ -742,7 +713,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
       try {
         const importedCustomization = JSON.parse(e.target.result)
         updateCustomization(importedCustomization)
-      } catch (error) {
+      } catch {
         alert("Failed to import character: Invalid file format")
       }
     }
@@ -958,8 +929,6 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
               </Turntable>
               <Environment preset="apartment" />
               <CameraController
-                zoom={cameraZoom}
-                setZoom={setCameraZoom}
                 target={cameraTarget}
                 setTarget={setCameraTarget}
                 position={cameraPosition}
