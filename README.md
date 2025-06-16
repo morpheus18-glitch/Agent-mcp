@@ -123,6 +123,15 @@ The application uses the following database schema:
 - `training_jobs`: Model training jobs
 - `templates`: Templates for conversations and agents
 - `system_metrics`: Metrics for monitoring
+- `roles`: Available roles for users
+- `permissions`: Defined permissions
+- `role_permissions`: Map roles to permissions
+- `user_roles`: Additional roles for users
+- `audit_logs`: Security audit logs
+- `menus`: Navigation menus
+- `menu_permissions`: Role-based menu access
+- `settings`: User and application settings
+- `configurations`: Application configuration values
 
 ## API Endpoints
 

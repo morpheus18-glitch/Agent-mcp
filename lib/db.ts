@@ -78,3 +78,42 @@ export interface ConversationVector {
   vector_data: Record<string, unknown>
   created_at: Date
 }
+
+export interface Role {
+  id: string // UUID
+  name: string
+  description: string | null
+  created_at: Date
+}
+
+export interface Permission {
+  id: string // UUID
+  name: string
+  description: string | null
+}
+
+export interface MenuItem {
+  id: string // UUID
+  name: string
+  path: string | null
+  icon: string | null
+  parent_id: string | null
+  sort_order: number
+  created_at: Date
+  updated_at: Date
+}
+
+export interface Setting {
+  id: string // UUID
+  user_id: string | null
+  key: string
+  value: string
+  created_at: Date
+  updated_at: Date
+}
+
+export interface Configuration {
+  key: string
+  value: string
+  updated_at: Date
+}

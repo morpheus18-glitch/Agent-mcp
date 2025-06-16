@@ -251,12 +251,120 @@ async function setupDatabase() {
     `)
     console.log("✅ System metrics table created.")
 
+    // Roles Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS roles (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(100) UNIQUE NOT NULL,
+        description TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Roles table created.")
+
+    // Permissions Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS permissions (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(100) UNIQUE NOT NULL,
+        description TEXT
+      );
+    `)
+    console.log("✅ Permissions table created.")
+
+    // Role Permissions Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS role_permissions (
+        role_id UUID REFERENCES roles(id) ON DELETE CASCADE,
+        permission_id UUID REFERENCES permissions(id) ON DELETE CASCADE,
+        PRIMARY KEY (role_id, permission_id)
+      );
+    `)
+    console.log("✅ Role permissions table created.")
+
+    // User Roles Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS user_roles (
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        role_id UUID REFERENCES roles(id) ON DELETE CASCADE,
+        PRIMARY KEY (user_id, role_id)
+      );
+    `)
+    console.log("✅ User roles table created.")
+
+    // Audit Logs Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS audit_logs (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID REFERENCES users(id),
+        action VARCHAR(255) NOT NULL,
+        entity_type VARCHAR(50) NOT NULL,
+        entity_id VARCHAR(255) NOT NULL,
+        details JSONB,
+        ip_address VARCHAR(50),
+        user_agent TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Audit logs table created.")
+
+    // Menus Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS menus (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(255) NOT NULL,
+        path VARCHAR(255),
+        icon VARCHAR(100),
+        parent_id UUID REFERENCES menus(id),
+        sort_order INTEGER DEFAULT 0,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Menus table created.")
+
+    // Menu Permissions Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS menu_permissions (
+        menu_id UUID REFERENCES menus(id) ON DELETE CASCADE,
+        role_id UUID REFERENCES roles(id) ON DELETE CASCADE,
+        PRIMARY KEY (menu_id, role_id)
+      );
+    `)
+    console.log("✅ Menu permissions table created.")
+
+    // Settings Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS settings (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID REFERENCES users(id),
+        key VARCHAR(100) NOT NULL,
+        value TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Settings table created.")
+
+    // Configurations Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS configurations (
+        key VARCHAR(100) PRIMARY KEY,
+        value TEXT NOT NULL,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Configurations table created.")
+
     // Create indexes for better performance
     await query(`
       CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON messages(conversation_id);
       CREATE INDEX IF NOT EXISTS idx_conversation_agents_conversation_id ON conversation_agents(conversation_id);
       CREATE INDEX IF NOT EXISTS idx_conversations_created_by ON conversations(created_by);
       CREATE INDEX IF NOT EXISTS idx_agents_created_by ON agents(created_by);
+      CREATE INDEX IF NOT EXISTS idx_menus_parent_id ON menus(parent_id);
+      CREATE INDEX IF NOT EXISTS idx_audit_logs_user_id ON audit_logs(user_id);
+      CREATE INDEX IF NOT EXISTS idx_settings_user_id ON settings(user_id);
     `)
     console.log("✅ Indexes created.")
 
