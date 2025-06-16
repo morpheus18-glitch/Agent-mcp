@@ -13,10 +13,33 @@ export interface Todo {
 
 // User types
 export interface User {
-  id: number
-  username: string
+  id: string
   email: string
+  full_name: string
   role: string
+  is_active: boolean
   created_at: string
   updated_at: string
+}
+
+export interface Template {
+  id: string
+  name: string
+  description: string | null
+  category: string
+  content: unknown
+  tags: string[]
+  created_by: string | null
+  is_public: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface File {
+  id: string
+  name: string
+  type: string
+  size: number
+  url: string
+  created_at: string
 }
