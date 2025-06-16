@@ -199,3 +199,10 @@ declare module "next-auth" {
 }
 ```
 
+
+## Serving Unity Builds
+
+See [docs/UnityBuild.md](docs/UnityBuild.md) for detailed instructions on building and deploying the Unity client.
+After you export the project from Unity, copy the output into `public/UnityBuild/` so the files are served statically by Next.js.
+You can then access the build at `http://<host>/UnityBuild/index.html` or embed it using an `<iframe>`.
+
