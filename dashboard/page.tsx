@@ -1,7 +1,13 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import EnvChecker from "@/components/env-checker"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import EnvChecker from "@/components/env-checker";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function DashboardPage() {
   return (
@@ -18,8 +24,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p>
-              This dashboard provides tools to manage your LLM Sandbox environment. Check your environment configuration
-              above to ensure everything is set up correctly.
+              This dashboard provides tools to manage your LLM Sandbox
+              environment. Check your environment configuration above to ensure
+              everything is set up correctly.
             </p>
             <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
               <Button asChild variant="outline">
@@ -57,17 +64,26 @@ export default function DashboardPage() {
             <CardContent>
               <ul className="space-y-2">
                 <li>
-                  <a href="https://github.com/yourusername/llm-sandbox" className="text-blue-500 hover:underline">
+                  <a
+                    href="https://github.com/yourusername/llm-sandbox"
+                    className="text-blue-500 hover:underline"
+                  >
                     GitHub Repository
                   </a>
                 </li>
                 <li>
-                  <a href="https://docs.example.com/llm-sandbox" className="text-blue-500 hover:underline">
+                  <a
+                    href="https://docs.example.com/llm-sandbox"
+                    className="text-blue-500 hover:underline"
+                  >
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a href="https://discord.gg/example" className="text-blue-500 hover:underline">
+                  <a
+                    href="https://discord.gg/example"
+                    className="text-blue-500 hover:underline"
+                  >
                     Community Discord
                   </a>
                 </li>
@@ -99,5 +115,5 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

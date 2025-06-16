@@ -1,4 +1,4 @@
-import type { AgentConfig } from "@/types/sandbox"
+import type { AgentConfig } from "@/types/sandbox";
 
 // This service would handle the actual LLM interactions
 // For demo purposes, we're using a simplified implementation
@@ -8,8 +8,8 @@ export async function generateAgentResponse(
   conversationHistory: string,
   latestMessage: string,
 ): Promise<{
-  content: string
-  thinking?: string
+  content: string;
+  thinking?: string;
 }> {
   try {
     // In a real implementation, you would call your LLM API based on the agent's model
@@ -25,13 +25,13 @@ export async function generateAgentResponse(
         model: agent.model,
         systemPrompt: agent.instructions,
       }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to generate agent response")
+      throw new Error("Failed to generate agent response");
     }
 
-    const data = await response.json()
+    const data = await response.json();
 
     // In a real implementation, you would parse the response to extract thinking
     // For demo purposes, we're returning a mock response
@@ -39,9 +39,9 @@ export async function generateAgentResponse(
     return {
       content: data.text,
       thinking: "This is a simulated thinking process for the agent.",
-    }
+    };
   } catch (error) {
-    console.error("Error generating agent response:", error)
-    throw error
+    console.error("Error generating agent response:", error);
+    throw error;
   }
 }

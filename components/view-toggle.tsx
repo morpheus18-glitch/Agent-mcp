@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Monitor, CuboidIcon as Cube } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Monitor, CuboidIcon as Cube } from "lucide-react";
 
 interface ViewToggleProps {
-  view: "2d" | "3d"
-  onToggle: (view: "2d" | "3d") => void
+  view: "2d" | "3d";
+  onToggle: (view: "2d" | "3d") => void;
 }
 
 export default function ViewToggle({ view, onToggle }: ViewToggleProps) {
@@ -31,5 +31,5 @@ export default function ViewToggle({ view, onToggle }: ViewToggleProps) {
         <span>3D World</span>
       </Button>
     </div>
-  )
+  );
 }

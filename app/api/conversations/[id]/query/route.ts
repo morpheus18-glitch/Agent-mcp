@@ -1,10 +1,13 @@
-import { NextResponse } from "next/server"
-import { query } from "@/lib/db"
+import { NextResponse } from "next/server";
+import { query } from "@/lib/db";
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
   try {
-    const conversationId = params.id
-    const { content } = await request.json()
+    const conversationId = params.id;
+    const { content } = await request.json();
 
     // First, save the query to the database
     const result = await query(
@@ -14,7 +17,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       RETURNING *
     `,
       [conversationId, content],
-    )
+    );
 
     // Update the conversation's last_activity
     await query(
@@ -24,11 +27,14 @@ export async function POST(request: Request, { params }: { params: { id: string 
       WHERE id = $1
     `,
       [conversationId],
-    )
+    );
 
-    return NextResponse.json(result[0])
+    return NextResponse.json(result[0]);
   } catch (error) {
-    console.error("Error processing query:", error)
-    return NextResponse.json({ error: "Failed to process query" }, { status: 500 })
+    console.error("Error processing query:", error);
+    return NextResponse.json(
+      { error: "Failed to process query" },
+      { status: 500 },
+    );
   }
 }

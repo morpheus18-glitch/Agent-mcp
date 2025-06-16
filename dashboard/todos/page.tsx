@@ -1,4 +1,4 @@
-import TodoList from "@/components/TodoList"
+import TodoList from "@/components/TodoList";
 
 export default function TodosPage() {
   return (
@@ -6,5 +6,5 @@ export default function TodosPage() {
       <h1 className="text-3xl font-bold mb-6">Todo Management</h1>
       <TodoList />
     </div>
-  )
+  );
 }

@@ -47,6 +47,7 @@ pnpm run setup
 ```
 
 This script will:
+
 - Create a `.env.local` file with the necessary environment variables
 - Set up the database tables
 - Test the database connection
@@ -97,12 +98,12 @@ pnpm run setup-db
 ```bash
 pnpm run test-db
 ```
+
 ### 4. Check Environment Variables
 
 ```bash
 pnpm run check-env
 ```
-
 
 ## Database Schema
 
@@ -170,23 +171,23 @@ If you have issues connecting to the database:
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Let's add types for NextAuth:
+
 The application extends NextAuth.js types so `session.user` includes `id` and `role`. The declarations live in `types/next-auth.d.ts`:
 
 ```ts
-import NextAuth, { DefaultSession } from "next-auth"
+import NextAuth, { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string
-      role: string
-    } & DefaultSession["user"]
+      id: string;
+      role: string;
+    } & DefaultSession["user"];
   }
 
   interface User {
-    id: string
-    role: string
+    id: string;
+    role: string;
   }
 }
 ```
-

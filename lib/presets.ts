@@ -1,4 +1,8 @@
-import type { AgentConfig, InteractionStyle, ConversationTemplate } from "@/types/sandbox"
+import type {
+  AgentConfig,
+  InteractionStyle,
+  ConversationTemplate,
+} from "@/types/sandbox";
 
 // Agent presets
 export const AGENT_PRESETS: AgentConfig[] = [
@@ -103,10 +107,14 @@ export const AGENT_PRESETS: AgentConfig[] = [
     description: "Breaks down complex issues to fundamental principles",
     instructions:
       "You are a first principles thinker who breaks down complex issues to their fundamental elements. Avoid reasoning by analogy, question established wisdom, and build understanding from the ground up. Seek the essential nature of problems.",
-    expertise: ["Fundamental Analysis", "Conceptual Deconstruction", "Reductionism"],
+    expertise: [
+      "Fundamental Analysis",
+      "Conceptual Deconstruction",
+      "Reductionism",
+    ],
     traits: ["Fundamental", "Clear", "Rigorous"],
   },
-]
+];
 
 // Interaction styles
 export const INTERACTION_STYLES: InteractionStyle[] = [
@@ -146,7 +154,7 @@ export const INTERACTION_STYLES: InteractionStyle[] = [
     enableRecursiveThinking: true,
     enableEmergentBehavior: true,
   },
-]
+];
 
 // Conversation templates
 export const CONVERSATION_TEMPLATES: ConversationTemplate[] = [
@@ -160,8 +168,15 @@ export const CONVERSATION_TEMPLATES: ConversationTemplate[] = [
       "Explore the philosophical implications of consciousness in AI systems and what it means for our understanding of mind and being",
     systemPrompt:
       "This is a philosophical inquiry into consciousness and AI. Explore concepts deeply, consider multiple perspectives, and avoid simplistic conclusions.",
-    constraints: ["Avoid technical implementation details", "Consider diverse philosophical traditions"],
-    suggestedAgents: ["critical-thinker", "ethical-reasoner", "first-principles-thinker"],
+    constraints: [
+      "Avoid technical implementation details",
+      "Consider diverse philosophical traditions",
+    ],
+    suggestedAgents: [
+      "critical-thinker",
+      "ethical-reasoner",
+      "first-principles-thinker",
+    ],
   },
   {
     id: "innovation-workshop",
@@ -173,8 +188,15 @@ export const CONVERSATION_TEMPLATES: ConversationTemplate[] = [
       "Generate and refine innovative approaches to urban transportation that reduce environmental impact while improving accessibility",
     systemPrompt:
       "This is an innovation workshop focused on sustainable urban transportation. Generate creative ideas, build on each other's contributions, and develop practical solutions.",
-    constraints: ["Solutions must be environmentally sustainable", "Consider accessibility for all populations"],
-    suggestedAgents: ["creative-explorer", "systems-thinker", "pragmatic-implementer"],
+    constraints: [
+      "Solutions must be environmentally sustainable",
+      "Consider accessibility for all populations",
+    ],
+    suggestedAgents: [
+      "creative-explorer",
+      "systems-thinker",
+      "pragmatic-implementer",
+    ],
   },
   {
     id: "ethical-dilemma",
@@ -186,7 +208,10 @@ export const CONVERSATION_TEMPLATES: ConversationTemplate[] = [
       "Analyze the ethical dimensions of human genetic engineering from multiple moral frameworks and perspectives",
     systemPrompt:
       "This conversation explores the ethical implications of genetic engineering technologies. Consider different ethical frameworks, stakeholder perspectives, and potential consequences.",
-    constraints: ["Avoid simplistic good/bad dichotomies", "Consider cultural and religious perspectives"],
+    constraints: [
+      "Avoid simplistic good/bad dichotomies",
+      "Consider cultural and religious perspectives",
+    ],
     suggestedAgents: ["ethical-reasoner", "devil-advocate", "systems-thinker"],
   },
   {
@@ -199,21 +224,36 @@ export const CONVERSATION_TEMPLATES: ConversationTemplate[] = [
       "Develop balanced policy recommendations for AI governance that promote innovation while mitigating risks",
     systemPrompt:
       "This conversation aims to develop policy recommendations for AI governance. Consider stakeholder interests, implementation challenges, and balancing innovation with safety.",
-    constraints: ["Recommendations should be implementable", "Consider international dimensions"],
-    suggestedAgents: ["pragmatic-implementer", "ethical-reasoner", "devil-advocate"],
+    constraints: [
+      "Recommendations should be implementable",
+      "Consider international dimensions",
+    ],
+    suggestedAgents: [
+      "pragmatic-implementer",
+      "ethical-reasoner",
+      "devil-advocate",
+    ],
   },
   {
     id: "scientific-exploration",
     name: "Scientific Exploration",
-    description: "Collaborative exploration of scientific concepts and theories",
+    description:
+      "Collaborative exploration of scientific concepts and theories",
     tags: ["Science", "Research", "Theory"],
     topic: "Emerging theories in quantum computing and their implications",
     objective:
       "Explore current developments in quantum computing theory and their potential implications for computing and other fields",
     systemPrompt:
       "This is a scientific exploration of quantum computing theories. Discuss concepts with precision, consider evidence, and identify promising research directions.",
-    constraints: ["Maintain scientific rigor", "Clearly distinguish established science from speculation"],
-    suggestedAgents: ["systems-thinker", "first-principles-thinker", "creative-explorer"],
+    constraints: [
+      "Maintain scientific rigor",
+      "Clearly distinguish established science from speculation",
+    ],
+    suggestedAgents: [
+      "systems-thinker",
+      "first-principles-thinker",
+      "creative-explorer",
+    ],
   },
   {
     id: "strategic-planning",
@@ -229,9 +269,13 @@ export const CONVERSATION_TEMPLATES: ConversationTemplate[] = [
       "Strategies should be adaptable to different industry contexts",
       "Consider both short and long-term horizons",
     ],
-    suggestedAgents: ["pragmatic-implementer", "systems-thinker", "devil-advocate"],
+    suggestedAgents: [
+      "pragmatic-implementer",
+      "systems-thinker",
+      "devil-advocate",
+    ],
   },
-]
+];
 
 // Language options
 export const LANGUAGE_OPTIONS = [
@@ -243,4 +287,4 @@ export const LANGUAGE_OPTIONS = [
   { id: "japanese", name: "Japanese" },
   { id: "arabic", name: "Arabic" },
   { id: "russian", name: "Russian" },
-]
+];

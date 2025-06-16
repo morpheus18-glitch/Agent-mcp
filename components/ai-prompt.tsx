@@ -1,22 +1,28 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function AIPrompt() {
-  const [prompt, setPrompt] = useState("")
-  const [response, setResponse] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     try {
       const res = await fetch("/api/ai", {
@@ -28,19 +34,19 @@ export default function AIPrompt() {
           prompt,
           systemPrompt: "You are a helpful AI assistant.",
         }),
-      })
+      });
 
       if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.error || "Failed to generate response")
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to generate response");
       }
 
-      const data = await res.json()
-      setResponse(data.text)
+      const data = await res.json();
+      setResponse(data.text);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -78,5 +84,5 @@ export default function AIPrompt() {
         </CardFooter>
       </form>
     </Card>
-  )
+  );
 }

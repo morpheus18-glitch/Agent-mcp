@@ -1,20 +1,22 @@
-import { v4 as uuidv4 } from "uuid"
-import type { AgentConfig, Conversation, Message } from "@/types/sandbox"
-import { GroqChat } from "@ai-sdk/groq"
-import { createMCP, type MCPContext, type MCPMessage } from "./protocols/mcp"
-import { createA2A, type A2AAgent } from "./protocols/a2a"
+import { v4 as uuidv4 } from "uuid";
+import type { AgentConfig, Conversation, Message } from "@/types/sandbox";
+import { GroqChat } from "@ai-sdk/groq";
+import { createMCP, type MCPContext, type MCPMessage } from "./protocols/mcp";
+import { createA2A, type A2AAgent } from "./protocols/a2a";
 
 // Initialize the Groq client
 const getGroqClient = () => {
-  const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY
+  const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY;
   if (!apiKey) {
-    throw new Error("Groq API key is missing. Please set the NEXT_PUBLIC_GROQ_API_KEY environment variable.")
+    throw new Error(
+      "Groq API key is missing. Please set the NEXT_PUBLIC_GROQ_API_KEY environment variable.",
+    );
   }
-  return new GroqChat({ apiKey })
-}
+  return new GroqChat({ apiKey });
+};
 
 // Create A2A protocol instance
-const a2aProtocol = createA2A()
+const a2aProtocol = createA2A();
 
 export async function startConversation(
   agents: AgentConfig[],
@@ -23,7 +25,7 @@ export async function startConversation(
   systemPrompt: string,
 ): Promise<Conversation> {
   // Create a new conversation
-  const conversationId = uuidv4()
+  const conversationId = uuidv4();
   const conversation: Conversation = {
     id: conversationId,
     topic,
@@ -32,7 +34,7 @@ export async function startConversation(
     messages: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-  }
+  };
 
   // Register agents with A2A protocol
   agents.forEach((agent) => {
@@ -49,22 +51,22 @@ export async function startConversation(
         avatar: agent.avatar,
         color: agent.color,
       },
-    }
+    };
 
-    a2aProtocol.registerAgent(a2aAgent)
-  })
+    a2aProtocol.registerAgent(a2aAgent);
+  });
 
   // Create A2A conversation
   a2aProtocol.createConversation(
     topic,
     agents.map((a) => a.id),
-  )
+  );
 
   // Generate the first message from the first agent
-  const firstMessage = await generateAgentMessage(agents[0], conversation, [])
-  conversation.messages = [firstMessage]
+  const firstMessage = await generateAgentMessage(agents[0], conversation, []);
+  conversation.messages = [firstMessage];
 
-  return conversation
+  return conversation;
 }
 
 export async function generateAgentMessage(
@@ -75,7 +77,9 @@ export async function generateAgentMessage(
   try {
     // Check if GROQ_API_KEY is available
     if (!process.env.NEXT_PUBLIC_GROQ_API_KEY) {
-      throw new Error("Groq API key is missing. Please set the NEXT_PUBLIC_GROQ_API_KEY environment variable.")
+      throw new Error(
+        "Groq API key is missing. Please set the NEXT_PUBLIC_GROQ_API_KEY environment variable.",
+      );
     }
 
     // Create MCP context
@@ -87,9 +91,9 @@ export async function generateAgentMessage(
         modelVersion: "1.0",
         temperature: 0.7,
       },
-    }
+    };
 
-    const mcp = createMCP(mcpContext)
+    const mcp = createMCP(mcpContext);
 
     // Add system instruction
     mcp.addInstruction({
@@ -106,7 +110,7 @@ export async function generateAgentMessage(
       
       Include your thinking process by adding 'Thinking: [your thought process]' at the end of your response.`,
       priority: 10,
-    })
+    });
 
     // Add previous messages to MCP
     previousMessages.forEach((msg) => {
@@ -115,16 +119,18 @@ export async function generateAgentMessage(
       // Option 2: Retrieve agents from the conversation object (if available)
       // Option 3: Retrieve agents from a global store (not recommended)
       // Assuming agents can be derived from the conversation messages for now
-      const agentIds = [...new Set(conversation.messages.map((msg) => msg.agentId))]
+      const agentIds = [
+        ...new Set(conversation.messages.map((msg) => msg.agentId)),
+      ];
       const agents: AgentConfig[] = agentIds.map((id) => {
-        const message = conversation.messages.find((msg) => msg.agentId === id)
-        if (!message) throw new Error(`No message found for agent ${id}`)
+        const message = conversation.messages.find((msg) => msg.agentId === id);
+        if (!message) throw new Error(`No message found for agent ${id}`);
 
         // Find the agent in the conversation
         const agent = conversation.messages
           .filter((msg) => msg.agentId === id)
           .map((msg) => msg.metadata?.agent as AgentConfig)
-          .find((a) => a !== undefined)
+          .find((a) => a !== undefined);
 
         if (!agent) {
           // If agent metadata is not found, create a placeholder
@@ -136,48 +142,53 @@ export async function generateAgentMessage(
             instructions: "You are a helpful assistant.",
             color: "#4f46e5",
             role: "assistant",
-          }
+          };
         }
 
-        return agent
-      })
+        return agent;
+      });
 
-      const role = msg.agentId === agent.id ? "assistant" : "user"
-      const name = agents.find((a) => a.id === msg.agentId)?.name || msg.agentId
+      const role = msg.agentId === agent.id ? "assistant" : "user";
+      const name =
+        agents.find((a) => a.id === msg.agentId)?.name || msg.agentId;
 
       mcp.addMessage({
         role: role as MCPMessage["role"],
         content: msg.content,
         name,
-      })
-    })
+      });
+    });
 
     // Create prompt using MCP
-    const prompt = mcp.createPrompt()
+    const prompt = mcp.createPrompt();
 
     // Initialize Groq client
-    const groqClient = getGroqClient()
+    const groqClient = getGroqClient();
 
     // Generate response using Groq
     const response = await groqClient.chat({
       model: agent.model || "llama3-70b-8192",
       messages: [
         { role: "system", content: prompt },
-        { role: "user", content: "Now it's your turn to respond. Remember to stay in character." },
+        {
+          role: "user",
+          content:
+            "Now it's your turn to respond. Remember to stay in character.",
+        },
       ],
       temperature: 0.7,
       max_tokens: 500,
-    })
+    });
 
     // Extract content from response
-    const content = response.choices[0].message.content || ""
+    const content = response.choices[0].message.content || "";
 
     // Process response with MCP
     const mcpResponse = mcp.processResponse(content, {
       completionTokens: response.usage?.completion_tokens || 0,
       promptTokens: response.usage?.prompt_tokens || 0,
       totalTokens: response.usage?.total_tokens || 0,
-    })
+    });
 
     // Create message object
     const message: Message = {
@@ -191,42 +202,52 @@ export async function generateAgentMessage(
         tokens: mcpResponse.metadata.totalTokens,
         latency: mcpResponse.metadata.latency,
       },
-    }
+    };
 
     // Add message to A2A conversation if it exists
     try {
-      const a2aConversation = a2aProtocol.getConversation(conversation.id)
+      const a2aConversation = a2aProtocol.getConversation(conversation.id);
       if (a2aConversation) {
-        a2aProtocol.sendMessage(conversation.id, agent.id, mcpResponse.content, {
-          type: "response",
-          metadata: {
-            thinking: mcpResponse.metadata.thinking,
+        a2aProtocol.sendMessage(
+          conversation.id,
+          agent.id,
+          mcpResponse.content,
+          {
+            type: "response",
+            metadata: {
+              thinking: mcpResponse.metadata.thinking,
+            },
           },
-        })
+        );
       }
     } catch (error) {
-      console.warn("Failed to add message to A2A conversation:", error)
+      console.warn("Failed to add message to A2A conversation:", error);
     }
 
-    return message
+    return message;
   } catch (error) {
-    console.error("Error generating agent message:", error)
-    throw error
+    console.error("Error generating agent message:", error);
+    throw error;
   }
 }
 
-export async function continueConversation(conversation: Conversation, nextAgentIndex: number): Promise<Message> {
+export async function continueConversation(
+  conversation: Conversation,
+  nextAgentIndex: number,
+): Promise<Message> {
   // Get all agents from the conversation messages
-  const agentIds = [...new Set(conversation.messages.map((msg) => msg.agentId))]
+  const agentIds = [
+    ...new Set(conversation.messages.map((msg) => msg.agentId)),
+  ];
   const agents: AgentConfig[] = agentIds.map((id) => {
-    const message = conversation.messages.find((msg) => msg.agentId === id)
-    if (!message) throw new Error(`No message found for agent ${id}`)
+    const message = conversation.messages.find((msg) => msg.agentId === id);
+    if (!message) throw new Error(`No message found for agent ${id}`);
 
     // Find the agent in the conversation
     const agent = conversation.messages
       .filter((msg) => msg.agentId === id)
       .map((msg) => msg.metadata?.agent as AgentConfig)
-      .find((a) => a !== undefined)
+      .find((a) => a !== undefined);
 
     if (!agent) {
       // If agent metadata is not found, create a placeholder
@@ -238,20 +259,25 @@ export async function continueConversation(conversation: Conversation, nextAgent
         instructions: "You are a helpful assistant.",
         color: "#4f46e5",
         role: "assistant",
-      }
+      };
     }
 
-    return agent
-  })
+    return agent;
+  });
 
-  const nextAgent = agents[nextAgentIndex % agents.length]
-  const newMessage = await generateAgentMessage(nextAgent, conversation, conversation.messages)
-  return newMessage
+  const nextAgent = agents[nextAgentIndex % agents.length];
+  const newMessage = await generateAgentMessage(
+    nextAgent,
+    conversation,
+    conversation.messages,
+  );
+  return newMessage;
 }
 
-
-
-export async function queryConversation(conversationId: string, queryText: string): Promise<string> {
+export async function queryConversation(
+  conversationId: string,
+  queryText: string,
+): Promise<string> {
   // Use MCP for querying the conversation
   try {
     const mcpContext: Partial<MCPContext> = {
@@ -262,9 +288,9 @@ export async function queryConversation(conversationId: string, queryText: strin
         modelVersion: "1.0",
         temperature: 0.5,
       },
-    }
+    };
 
-    const mcp = createMCP(mcpContext)
+    const mcp = createMCP(mcpContext);
 
     // Add system instruction for analysis
     mcp.addInstruction({
@@ -275,10 +301,10 @@ export async function queryConversation(conversationId: string, queryText: strin
       
       Provide a detailed analysis with specific examples from the conversation.`,
       priority: 10,
-    })
+    });
 
     // Initialize Groq client
-    const groqClient = getGroqClient()
+    const groqClient = getGroqClient();
 
     // Generate analysis using Groq
     const response = await groqClient.chat({
@@ -286,11 +312,11 @@ export async function queryConversation(conversationId: string, queryText: strin
       messages: [{ role: "system", content: mcp.createPrompt() }],
       temperature: 0.5,
       max_tokens: 1000,
-    })
+    });
 
-    return response.choices[0].message.content || "No analysis available."
+    return response.choices[0].message.content || "No analysis available.";
   } catch (error) {
-    console.error("Error querying conversation:", error)
-    return `Error analyzing conversation: ${error instanceof Error ? error.message : "Unknown error"}`
+    console.error("Error querying conversation:", error);
+    return `Error analyzing conversation: ${error instanceof Error ? error.message : "Unknown error"}`;
   }
 }

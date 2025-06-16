@@ -8,109 +8,109 @@
 
 export interface MCPContext {
   // Core context information
-  conversationId: string
-  messageId: string
-  timestamp: string
+  conversationId: string;
+  messageId: string;
+  timestamp: string;
 
   // Context management
   contextWindow: {
-    maxTokens: number
-    usedTokens: number
-    remainingTokens: number
-  }
+    maxTokens: number;
+    usedTokens: number;
+    remainingTokens: number;
+  };
 
   // Metadata
   metadata: {
-    modelId: string
-    modelProvider: string
-    modelVersion: string
-    temperature: number
-    topP?: number
-    frequencyPenalty?: number
-    presencePenalty?: number
-    [key: string]: unknown
-  }
+    modelId: string;
+    modelProvider: string;
+    modelVersion: string;
+    temperature: number;
+    topP?: number;
+    frequencyPenalty?: number;
+    presencePenalty?: number;
+    [key: string]: unknown;
+  };
 
   // Memory management
   memory: {
-    shortTerm: unknown[]
-    longTerm?: unknown[]
-    episodic?: unknown[]
-    semantic?: unknown[]
-  }
+    shortTerm: unknown[];
+    longTerm?: unknown[];
+    episodic?: unknown[];
+    semantic?: unknown[];
+  };
 
   // System state
   systemState?: {
-    [key: string]: unknown
-  }
+    [key: string]: unknown;
+  };
 }
 
 export interface MCPMessage {
-  role: "system" | "user" | "assistant" | "function" | "tool"
-  content: string
-  name?: string
-  id: string
-  timestamp: string
+  role: "system" | "user" | "assistant" | "function" | "tool";
+  content: string;
+  name?: string;
+  id: string;
+  timestamp: string;
 
   // Message-specific metadata
   metadata?: {
-    thinking?: string
-    confidence?: number
-    sentiment?: string
-    tokens?: number
-    [key: string]: unknown
-  }
+    thinking?: string;
+    confidence?: number;
+    sentiment?: string;
+    tokens?: number;
+    [key: string]: unknown;
+  };
 
   // References to other messages
   references?: {
-    inReplyTo?: string
-    citations?: string[]
-    corrections?: string[]
-  }
+    inReplyTo?: string;
+    citations?: string[];
+    corrections?: string[];
+  };
 }
 
 export interface MCPInstruction {
-  type: "directive" | "constraint" | "preference" | "goal"
-  content: string
-  priority: number
-  id: string
+  type: "directive" | "constraint" | "preference" | "goal";
+  content: string;
+  priority: number;
+  id: string;
 }
 
 export interface MCPResponse {
-  messageId: string
-  content: string
-  timestamp: string
+  messageId: string;
+  content: string;
+  timestamp: string;
 
   // Response-specific metadata
   metadata: {
-    thinking?: string
-    confidence?: number
-    completionTokens: number
-    promptTokens: number
-    totalTokens: number
-    latency: number
-    [key: string]: unknown
-  }
+    thinking?: string;
+    confidence?: number;
+    completionTokens: number;
+    promptTokens: number;
+    totalTokens: number;
+    latency: number;
+    [key: string]: unknown;
+  };
 
   // Function calls or tool use
   functionCalls?: {
-    name: string
-    arguments: unknown
-    result?: unknown
-  }[]
+    name: string;
+    arguments: unknown;
+    result?: unknown;
+  }[];
 
   // Error handling
   error?: {
-    code: string
-    message: string
-    details?: unknown
-  }
+    code: string;
+    message: string;
+    details?: unknown;
+  };
 }
 
 export class ModelContextProtocol {
-  private context: MCPContext
-  private messages: MCPMessage[] = []
-  private instructions: MCPInstruction[] = []
+  private context: MCPContext;
+  private messages: MCPMessage[] = [];
+  private instructions: MCPInstruction[] = [];
 
   constructor(initialContext: Partial<MCPContext>) {
     // Initialize with default values and override with provided context
@@ -132,50 +132,50 @@ export class ModelContextProtocol {
       memory: initialContext.memory || {
         shortTerm: [],
       },
-    }
+    };
   }
 
   // Add a message to the context
   addMessage(message: Omit<MCPMessage, "id" | "timestamp">): string {
-    const id = crypto.randomUUID()
-    const timestamp = new Date().toISOString()
+    const id = crypto.randomUUID();
+    const timestamp = new Date().toISOString();
 
     const fullMessage: MCPMessage = {
       ...message,
       id,
       timestamp,
-    }
+    };
 
-    this.messages.push(fullMessage)
-    return id
+    this.messages.push(fullMessage);
+    return id;
   }
 
   // Add an instruction to the context
   addInstruction(instruction: Omit<MCPInstruction, "id">): string {
-    const id = crypto.randomUUID()
+    const id = crypto.randomUUID();
 
     const fullInstruction: MCPInstruction = {
       ...instruction,
       id,
-    }
+    };
 
-    this.instructions.push(fullInstruction)
-    return id
+    this.instructions.push(fullInstruction);
+    return id;
   }
 
   // Get the current context
   getContext(): MCPContext {
-    return this.context
+    return this.context;
   }
 
   // Get all messages
   getMessages(): MCPMessage[] {
-    return this.messages
+    return this.messages;
   }
 
   // Get all instructions
   getInstructions(): MCPInstruction[] {
-    return this.instructions
+    return this.instructions;
   }
 
   // Update context metadata
@@ -183,38 +183,48 @@ export class ModelContextProtocol {
     this.context.metadata = {
       ...this.context.metadata,
       ...metadata,
-    }
+    };
   }
 
   // Create a formatted prompt for the model
   createPrompt(): string {
     // Sort instructions by priority
-    const sortedInstructions = [...this.instructions].sort((a, b) => b.priority - a.priority)
+    const sortedInstructions = [...this.instructions].sort(
+      (a, b) => b.priority - a.priority,
+    );
 
     // Build the system prompt from instructions
     const systemPrompt = sortedInstructions
-      .map((instruction) => `[${instruction.type.toUpperCase()}] ${instruction.content}`)
-      .join("\n\n")
+      .map(
+        (instruction) =>
+          `[${instruction.type.toUpperCase()}] ${instruction.content}`,
+      )
+      .join("\n\n");
 
     // Format the conversation history
-    const conversationHistory = this.messages.map((msg) => `${msg.role.toUpperCase()}: ${msg.content}`).join("\n\n")
+    const conversationHistory = this.messages
+      .map((msg) => `${msg.role.toUpperCase()}: ${msg.content}`)
+      .join("\n\n");
 
-    return `${systemPrompt}\n\n${conversationHistory}`
+    return `${systemPrompt}\n\n${conversationHistory}`;
   }
 
   // Process a response from the model
-  processResponse(rawResponse: string, metadata: Partial<MCPResponse["metadata"]> = {}): MCPResponse {
-    const messageId = crypto.randomUUID()
-    const timestamp = new Date().toISOString()
+  processResponse(
+    rawResponse: string,
+    metadata: Partial<MCPResponse["metadata"]> = {},
+  ): MCPResponse {
+    const messageId = crypto.randomUUID();
+    const timestamp = new Date().toISOString();
 
     // Extract thinking if present
-    let content = rawResponse
-    let thinking: string | undefined
+    let content = rawResponse;
+    let thinking: string | undefined;
 
     if (rawResponse.includes("Thinking:")) {
-      const parts = rawResponse.split("Thinking:")
-      content = parts[0].trim()
-      thinking = parts[1].trim()
+      const parts = rawResponse.split("Thinking:");
+      content = parts[0].trim();
+      thinking = parts[1].trim();
     }
 
     // Add the response as a message
@@ -224,7 +234,7 @@ export class ModelContextProtocol {
       metadata: {
         thinking,
       },
-    })
+    });
 
     return {
       messageId,
@@ -238,11 +248,13 @@ export class ModelContextProtocol {
         latency: 0, // Would be calculated in a real implementation
         ...metadata,
       },
-    }
+    };
   }
 }
 
 // Helper function to create a new MCP instance
-export function createMCP(initialContext: Partial<MCPContext> = {}): ModelContextProtocol {
-  return new ModelContextProtocol(initialContext)
+export function createMCP(
+  initialContext: Partial<MCPContext> = {},
+): ModelContextProtocol {
+  return new ModelContextProtocol(initialContext);
 }

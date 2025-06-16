@@ -1,9 +1,12 @@
-import { NextResponse } from "next/server"
-import { query } from "@/lib/db"
+import { NextResponse } from "next/server";
+import { query } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
   try {
-    const conversationId = params.id
+    const conversationId = params.id;
 
     // Get the latest messages for this conversation
     const messages = await query(
@@ -13,11 +16,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
       ORDER BY created_at ASC
     `,
       [conversationId],
-    )
+    );
 
-    return NextResponse.json(messages)
+    return NextResponse.json(messages);
   } catch (error) {
-    console.error("Error streaming conversation:", error)
-    return NextResponse.json({ error: "Failed to stream conversation" }, { status: 500 })
+    console.error("Error streaming conversation:", error);
+    return NextResponse.json(
+      { error: "Failed to stream conversation" },
+      { status: 500 },
+    );
   }
 }

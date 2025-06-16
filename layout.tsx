@@ -1,23 +1,23 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import Link from "next/link"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Button } from "@/components/ui/button"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Link from "next/link";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Button } from "@/components/ui/button";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "LLM Sandbox",
   description: "A sandbox for experimenting with LLMs",
-    generator: 'v0.dev'
-}
+  generator: "v0.dev",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -31,10 +31,16 @@ export default function RootLayout({
                     <span className="font-bold text-xl">LLM Sandbox</span>
                   </Link>
                   <nav className="flex items-center space-x-4 lg:space-x-6">
-                    <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
+                    <Link
+                      href="/"
+                      className="text-sm font-medium transition-colors hover:text-primary"
+                    >
                       Home
                     </Link>
-                    <Link href="/sandbox" className="text-sm font-medium transition-colors hover:text-primary">
+                    <Link
+                      href="/sandbox"
+                      className="text-sm font-medium transition-colors hover:text-primary"
+                    >
                       Sandbox
                     </Link>
                   </nav>
@@ -51,8 +57,7 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
 
-
-import './globals.css'
+import "./globals.css";

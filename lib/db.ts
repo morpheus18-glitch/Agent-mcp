@@ -1,7 +1,7 @@
-import { neon } from "@neondatabase/serverless"
-import type { NeonQueryFunction } from "@neondatabase/serverless"
+import { neon } from "@neondatabase/serverless";
+import type { NeonQueryFunction } from "@neondatabase/serverless";
 
-let cachedSql: NeonQueryFunction | null = null
+let cachedSql: NeonQueryFunction | null = null;
 
 /**
  * Lazily create and return the Neon client. This avoids evaluating the
@@ -9,13 +9,13 @@ let cachedSql: NeonQueryFunction | null = null
  */
 function getSqlClient(): NeonQueryFunction {
   if (!cachedSql) {
-    const url = process.env.DATABASE_URL
+    const url = process.env.DATABASE_URL;
     if (!url) {
-      throw new Error("DATABASE_URL environment variable is not set")
+      throw new Error("DATABASE_URL environment variable is not set");
     }
-    cachedSql = neon(url)
+    cachedSql = neon(url);
   }
-  return cachedSql
+  return cachedSql;
 }
 
 // Provide a wrapper around the neon transaction API so callers receive an
@@ -23,28 +23,28 @@ function getSqlClient(): NeonQueryFunction {
 export async function transaction<T>(
   fn: (client: { query: NeonQueryFunction }) => Promise<T>,
 ): Promise<T> {
-  const sql = getSqlClient()
+  const sql = getSqlClient();
   return sql.transaction((inner) => {
-    const client = { query: inner }
-    return fn(client)
-  })
+    const client = { query: inner };
+    return fn(client);
+  });
 }
 
 // Helper function to execute a query
 export async function query(query: string, params: unknown[] = []) {
   try {
-    const sql = getSqlClient()
-    return await sql(query, params)
+    const sql = getSqlClient();
+    return await sql(query, params);
   } catch (error) {
-    console.error("Database query error:", error)
-    throw error
+    console.error("Database query error:", error);
+    throw error;
   }
 }
 
 // In the serverless client there is no persistent pool, but we expose helpers
 // for API compatibility with code that expects them.
 export function getPool() {
-  return getSqlClient()
+  return getSqlClient();
 }
 
 export async function closePool() {
@@ -53,28 +53,28 @@ export async function closePool() {
 
 // Type definitions for our database models
 export interface Conversation {
-  id: string // UUID
-  title: string
-  template_id: number | null
-  agent_id: number | null
-  status: string
-  settings: Record<string, unknown>
-  created_at: Date
-  updated_at: Date
-  last_activity: Date
+  id: string; // UUID
+  title: string;
+  template_id: number | null;
+  agent_id: number | null;
+  status: string;
+  settings: Record<string, unknown>;
+  created_at: Date;
+  updated_at: Date;
+  last_activity: Date;
 }
 
 export interface ConversationMessage {
-  id: string // UUID
-  conversation_id: string // UUID
-  role: string
-  content: string
-  created_at: Date
+  id: string; // UUID
+  conversation_id: string; // UUID
+  role: string;
+  content: string;
+  created_at: Date;
 }
 
 export interface ConversationVector {
-  id: string // UUID
-  conversation_id: string // UUID
-  vector_data: Record<string, unknown>
-  created_at: Date
+  id: string; // UUID
+  conversation_id: string; // UUID
+  vector_data: Record<string, unknown>;
+  created_at: Date;
 }

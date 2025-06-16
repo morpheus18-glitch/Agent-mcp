@@ -1,18 +1,31 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { OrbitControls, useGLTF, Environment } from "@react-three/drei"
-import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { SketchPicker } from "react-color"
+import { useState, useEffect, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { SketchPicker } from "react-color";
 import {
   Loader2,
   Save,
@@ -30,90 +43,113 @@ import {
   ChevronRight,
   Eye,
   EyeOff,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Character model component with enhanced features
-function CharacterModel({ customization, position = [0, 0, 0], rotation = [0, 0, 0], scale = 1 }) {
-  const group = useRef()
-  const { nodes, materials } = useGLTF("/models/character-base.glb")
+function CharacterModel({
+  customization,
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+  scale = 1,
+}) {
+  const group = useRef();
+  const { nodes, materials } = useGLTF("/models/character-base.glb");
 
   // Apply customizations to the model
   useEffect(() => {
-    if (!nodes || !materials) return
+    if (!nodes || !materials) return;
 
     // Apply skin color
     if (materials.Skin) {
-      materials.Skin.color.set(customization.skinColor)
+      materials.Skin.color.set(customization.skinColor);
     }
 
     // Apply hair color
     if (materials.Hair) {
-      materials.Hair.color.set(customization.hairColor)
+      materials.Hair.color.set(customization.hairColor);
     }
 
     // Apply eye color
     if (materials.Eyes) {
-      materials.Eyes.color.set(customization.eyeColor)
+      materials.Eyes.color.set(customization.eyeColor);
     }
 
     // Apply clothing colors
     if (customization.outfit) {
       Object.entries(customization.outfit).forEach(([part, color]) => {
         if (materials[part]) {
-          materials[part].color.set(color)
+          materials[part].color.set(color);
         }
-      })
+      });
     }
 
     // Apply body morphs
-    if (nodes.Body?.morphTargetDictionary && nodes.Body?.morphTargetInfluences) {
-      const morphTargets = nodes.Body.morphTargetDictionary
+    if (
+      nodes.Body?.morphTargetDictionary &&
+      nodes.Body?.morphTargetInfluences
+    ) {
+      const morphTargets = nodes.Body.morphTargetDictionary;
 
       // Apply height
       if (morphTargets.height !== undefined) {
-        nodes.Body.morphTargetInfluences[morphTargets.height] = customization.height
+        nodes.Body.morphTargetInfluences[morphTargets.height] =
+          customization.height;
       }
 
       // Apply build/muscle
       if (morphTargets.build !== undefined) {
-        nodes.Body.morphTargetInfluences[morphTargets.build] = customization.build
+        nodes.Body.morphTargetInfluences[morphTargets.build] =
+          customization.build;
       }
 
       // Apply weight
       if (morphTargets.weight !== undefined) {
-        nodes.Body.morphTargetInfluences[morphTargets.weight] = customization.weight
+        nodes.Body.morphTargetInfluences[morphTargets.weight] =
+          customization.weight;
       }
     }
 
     // Apply face morphs
-    if (nodes.Face?.morphTargetDictionary && nodes.Face?.morphTargetInfluences) {
-      const morphTargets = nodes.Face.morphTargetDictionary
+    if (
+      nodes.Face?.morphTargetDictionary &&
+      nodes.Face?.morphTargetInfluences
+    ) {
+      const morphTargets = nodes.Face.morphTargetDictionary;
 
       // Apply smile
       if (morphTargets.smile !== undefined) {
-        nodes.Face.morphTargetInfluences[morphTargets.smile] = customization.smile
+        nodes.Face.morphTargetInfluences[morphTargets.smile] =
+          customization.smile;
       }
 
       // Apply eye size
       if (morphTargets.eyeSize !== undefined) {
-        nodes.Face.morphTargetInfluences[morphTargets.eyeSize] = customization.eyeSize
+        nodes.Face.morphTargetInfluences[morphTargets.eyeSize] =
+          customization.eyeSize;
       }
 
       // Apply jaw width
       if (morphTargets.jawWidth !== undefined) {
-        nodes.Face.morphTargetInfluences[morphTargets.jawWidth] = customization.jawWidth
+        nodes.Face.morphTargetInfluences[morphTargets.jawWidth] =
+          customization.jawWidth;
       }
 
       // Apply nose size
       if (morphTargets.noseSize !== undefined) {
-        nodes.Face.morphTargetInfluences[morphTargets.noseSize] = customization.noseSize
+        nodes.Face.morphTargetInfluences[morphTargets.noseSize] =
+          customization.noseSize;
       }
     }
-  }, [customization, materials, nodes])
+  }, [customization, materials, nodes]);
 
   return (
-    <group ref={group} position={position} rotation={rotation} scale={[scale, scale, scale]}>
+    <group
+      ref={group}
+      position={position}
+      rotation={rotation}
+      scale={[scale, scale, scale]}
+    >
       {/* Base character meshes */}
       <mesh
         geometry={nodes.Body.geometry}
@@ -134,7 +170,10 @@ function CharacterModel({ customization, position = [0, 0, 0], rotation = [0, 0,
       {customization.hairStyle && (
         <group>
           <mesh
-            geometry={nodes[`Hair_${customization.hairStyle}`]?.geometry || nodes.Hair_Default.geometry}
+            geometry={
+              nodes[`Hair_${customization.hairStyle}`]?.geometry ||
+              nodes.Hair_Default.geometry
+            }
             material={materials.Hair}
             castShadow
           />
@@ -148,7 +187,10 @@ function CharacterModel({ customization, position = [0, 0, 0], rotation = [0, 0,
       {customization.outfitStyle && (
         <group>
           <mesh
-            geometry={nodes[`Outfit_${customization.outfitStyle}`]?.geometry || nodes.Outfit_Default.geometry}
+            geometry={
+              nodes[`Outfit_${customization.outfitStyle}`]?.geometry ||
+              nodes.Outfit_Default.geometry
+            }
             material={materials.Outfit}
             castShadow
           />
@@ -170,40 +212,45 @@ function CharacterModel({ customization, position = [0, 0, 0], rotation = [0, 0,
           </group>
         ))}
     </group>
-  )
+  );
 }
 
 // Turntable animation for 360 view
-function Turntable({ children, speed = 0.005, autoRotate = false, enabled = true }) {
-  const group = useRef()
+function Turntable({
+  children,
+  speed = 0.005,
+  autoRotate = false,
+  enabled = true,
+}) {
+  const group = useRef();
 
   useFrame(() => {
     if (group.current && autoRotate && enabled) {
-      group.current.rotation.y += speed
+      group.current.rotation.y += speed;
     }
-  })
+  });
 
-  return <group ref={group}>{children}</group>
+  return <group ref={group}>{children}</group>;
 }
 
 // Camera controller
 function CameraController({ target, setTarget, position, setPosition }) {
-  const { camera, gl } = useThree()
-  const controlsRef = useRef()
+  const { camera, gl } = useThree();
+  const controlsRef = useRef();
 
   useEffect(() => {
     if (controlsRef.current) {
-      controlsRef.current.target.set(...target)
-      controlsRef.current.update()
+      controlsRef.current.target.set(...target);
+      controlsRef.current.update();
     }
-  }, [target])
+  }, [target]);
 
   useEffect(() => {
     if (camera) {
-      camera.position.set(...position)
-      camera.updateProjectionMatrix()
+      camera.position.set(...position);
+      camera.updateProjectionMatrix();
     }
-  }, [position, camera])
+  }, [position, camera]);
 
   return (
     <OrbitControls
@@ -215,12 +262,16 @@ function CameraController({ target, setTarget, position, setPosition }) {
       maxDistance={10}
       minPolarAngle={0}
       maxPolarAngle={Math.PI / 1.5}
-        onChange={() => {
-        setPosition([camera.position.x, camera.position.y, camera.position.z])
-        setTarget([controlsRef.current.target.x, controlsRef.current.target.y, controlsRef.current.target.z])
+      onChange={() => {
+        setPosition([camera.position.x, camera.position.y, camera.position.z]);
+        setTarget([
+          controlsRef.current.target.x,
+          controlsRef.current.target.y,
+          controlsRef.current.target.z,
+        ]);
       }}
     />
-  )
+  );
 }
 
 // Preset template component
@@ -237,7 +288,11 @@ function PresetTemplate({ preset, onSelect, isSelected }) {
         <Canvas>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
-          <CharacterModel customization={preset.customization} position={[0, -1, 0]} scale={0.8} />
+          <CharacterModel
+            customization={preset.customization}
+            position={[0, -1, 0]}
+            scale={0.8}
+          />
           <OrbitControls enableZoom={false} enablePan={false} />
         </Canvas>
       </div>
@@ -246,12 +301,12 @@ function PresetTemplate({ preset, onSelect, isSelected }) {
         <p className="text-xs text-muted-foreground">{preset.description}</p>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 // Color picker component
 function ColorPicker({ color, onChange, label }) {
-  const [showPicker, setShowPicker] = useState(false)
+  const [showPicker, setShowPicker] = useState(false);
 
   return (
     <div className="space-y-2">
@@ -262,16 +317,23 @@ function ColorPicker({ color, onChange, label }) {
           style={{ backgroundColor: color }}
           onClick={() => setShowPicker(!showPicker)}
         />
-        <Input value={color} onChange={(e) => onChange(e.target.value)} className="flex-1" />
+        <Input
+          value={color}
+          onChange={(e) => onChange(e.target.value)}
+          className="flex-1"
+        />
       </div>
       {showPicker && (
         <div className="absolute z-10 mt-1">
           <div className="fixed inset-0" onClick={() => setShowPicker(false)} />
-          <SketchPicker color={color} onChange={(color) => onChange(color.hex)} />
+          <SketchPicker
+            color={color}
+            onChange={(color) => onChange(color.hex)}
+          />
         </div>
       )}
     </div>
-  )
+  );
 }
 
 // Accessory item component
@@ -280,30 +342,38 @@ function AccessoryItem({ accessory, isSelected, onToggle }) {
     <div
       className={cn(
         "flex items-center p-2 rounded-md cursor-pointer",
-        isSelected ? "bg-primary/20 border border-primary" : "bg-muted hover:bg-muted/80",
+        isSelected
+          ? "bg-primary/20 border border-primary"
+          : "bg-muted hover:bg-muted/80",
       )}
       onClick={onToggle}
     >
-      <div className="w-10 h-10 bg-background rounded-md flex items-center justify-center mr-3">{accessory.icon}</div>
+      <div className="w-10 h-10 bg-background rounded-md flex items-center justify-center mr-3">
+        {accessory.icon}
+      </div>
       <div className="flex-1">
         <h4 className="text-sm font-medium">{accessory.name}</h4>
         <p className="text-xs text-muted-foreground">{accessory.description}</p>
       </div>
-      <div className="ml-2">{isSelected ? <Check className="h-5 w-5 text-primary" /> : null}</div>
+      <div className="ml-2">
+        {isSelected ? <Check className="h-5 w-5 text-primary" /> : null}
+      </div>
     </div>
-  )
+  );
 }
 
-
 // Main enhanced character creator component
-export default function EnhancedCharacterCreator({ onSave, initialCustomization = null }) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState("presets")
-  const [autoRotate, setAutoRotate] = useState(false)
-  const [showWireframe, setShowWireframe] = useState(false)
-  const [cameraPosition, setCameraPosition] = useState([0, 1.5, 4])
-  const [cameraTarget, setCameraTarget] = useState([0, 0, 0])
-  const [viewMode, setViewMode] = useState("full") // full, head, body, outfit
+export default function EnhancedCharacterCreator({
+  onSave,
+  initialCustomization = null,
+}) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("presets");
+  const [autoRotate, setAutoRotate] = useState(false);
+  const [showWireframe, setShowWireframe] = useState(false);
+  const [cameraPosition, setCameraPosition] = useState([0, 1.5, 4]);
+  const [cameraTarget, setCameraTarget] = useState([0, 0, 0]);
+  const [viewMode, setViewMode] = useState("full"); // full, head, body, outfit
 
   // Character customization state with expanded options
   const [customization, setCustomization] = useState({
@@ -340,11 +410,11 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
 
     // Accessories (expanded with properties)
     accessories: [],
-  })
+  });
 
   // History for undo/redo
-  const [history, setHistory] = useState([customization])
-  const [historyIndex, setHistoryIndex] = useState(0)
+  const [history, setHistory] = useState([customization]);
+  const [historyIndex, setHistoryIndex] = useState(0);
 
   // Available options (expanded)
   const hairStyles = [
@@ -358,7 +428,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
     { id: "braided", name: "Braided" },
     { id: "mohawk", name: "Mohawk" },
     { id: "afro", name: "Afro" },
-  ]
+  ];
 
   const outfitStyles = [
     { id: "casual", name: "Casual" },
@@ -371,7 +441,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
     { id: "steampunk", name: "Steampunk" },
     { id: "cyberpunk", name: "Cyberpunk" },
     { id: "military", name: "Military" },
-  ]
+  ];
 
   const accessoryOptions = [
     {
@@ -484,7 +554,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
         { id: "tattoo_face", name: "Face" },
       ],
     },
-  ]
+  ];
 
   // Character presets
   const characterPresets = [
@@ -528,7 +598,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
           bottom: "#2d3748",
           shoes: "#e53e3e",
         },
-        accessories: [{ id: "necklace", material: "Jewelry", position: [0, -0.2, 0] }],
+        accessories: [
+          { id: "necklace", material: "Jewelry", position: [0, -0.2, 0] },
+        ],
         height: 0.5,
         build: 0.4,
         weight: 0.4,
@@ -550,7 +622,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
           bottom: "#2d3748",
           shoes: "#e53e3e",
         },
-        accessories: [{ id: "watch", material: "Accessory", position: [0.3, -0.5, 0] }],
+        accessories: [
+          { id: "watch", material: "Accessory", position: [0.3, -0.5, 0] },
+        ],
         height: 0.7,
         build: 0.8,
         weight: 0.3,
@@ -632,98 +706,103 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
         smile: 0.2,
       },
     },
-  ]
+  ];
 
   // Initialize with initial customization if provided
   useEffect(() => {
     if (initialCustomization) {
-      setCustomization(initialCustomization)
-      setHistory([initialCustomization])
-      setHistoryIndex(0)
+      setCustomization(initialCustomization);
+      setHistory([initialCustomization]);
+      setHistoryIndex(0);
     }
 
     // Simulate loading assets
     const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+      setIsLoading(false);
+    }, 2000);
 
-    return () => clearTimeout(timer)
-  }, [initialCustomization])
+    return () => clearTimeout(timer);
+  }, [initialCustomization]);
 
   // Update customization and add to history
   const updateCustomization = (updates) => {
-    const newCustomization = { ...customization, ...updates }
+    const newCustomization = { ...customization, ...updates };
 
     // Add to history, removing any future states if we're not at the end
-    const newHistory = history.slice(0, historyIndex + 1).concat(newCustomization)
-    setHistory(newHistory)
-    setHistoryIndex(newHistory.length - 1)
+    const newHistory = history
+      .slice(0, historyIndex + 1)
+      .concat(newCustomization);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
 
-    setCustomization(newCustomization)
-  }
+    setCustomization(newCustomization);
+  };
 
   // Undo
   const handleUndo = () => {
     if (historyIndex > 0) {
-      setHistoryIndex(historyIndex - 1)
-      setCustomization(history[historyIndex - 1])
+      setHistoryIndex(historyIndex - 1);
+      setCustomization(history[historyIndex - 1]);
     }
-  }
+  };
 
   // Redo
   const handleRedo = () => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex(historyIndex + 1)
-      setCustomization(history[historyIndex + 1])
+      setHistoryIndex(historyIndex + 1);
+      setCustomization(history[historyIndex + 1]);
     }
-  }
+  };
 
   // Save character
   const handleSave = () => {
     if (onSave) {
-      onSave(customization)
+      onSave(customization);
     }
 
     // Save to local storage
-    localStorage.setItem("characterCustomization", JSON.stringify(customization))
+    localStorage.setItem(
+      "characterCustomization",
+      JSON.stringify(customization),
+    );
 
-    alert("Character saved successfully!")
-  }
+    alert("Character saved successfully!");
+  };
 
   // Export character
   const handleExport = () => {
-    const dataStr = JSON.stringify(customization, null, 2)
-    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`
+    const dataStr = JSON.stringify(customization, null, 2);
+    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
 
-    const exportFileDefaultName = `${customization.name.toLowerCase().replace(/\s+/g, "-")}-character.json`
+    const exportFileDefaultName = `${customization.name.toLowerCase().replace(/\s+/g, "-")}-character.json`;
 
-    const linkElement = document.createElement("a")
-    linkElement.setAttribute("href", dataUri)
-    linkElement.setAttribute("download", exportFileDefaultName)
-    linkElement.click()
-  }
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
+  };
 
   // Import character
   const handleImport = (event) => {
-    const file = event.target.files[0]
-    if (!file) return
+    const file = event.target.files[0];
+    if (!file) return;
 
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const importedCustomization = JSON.parse(e.target.result)
-        updateCustomization(importedCustomization)
+        const importedCustomization = JSON.parse(e.target.result);
+        updateCustomization(importedCustomization);
       } catch {
-        alert("Failed to import character: Invalid file format")
+        alert("Failed to import character: Invalid file format");
       }
-    }
-    reader.readAsText(file)
-  }
+    };
+    reader.readAsText(file);
+  };
 
   // Toggle accessory
   const toggleAccessory = (accessory) => {
-    const accessories = [...customization.accessories]
-    const index = accessories.findIndex((a) => a.id === accessory.id)
+    const accessories = [...customization.accessories];
+    const index = accessories.findIndex((a) => a.id === accessory.id);
 
     if (index === -1) {
       accessories.push({
@@ -731,44 +810,45 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
         material: accessory.material,
         position: accessory.position,
         variant: accessory.variants?.[0]?.id || null,
-      })
+      });
     } else {
-      accessories.splice(index, 1)
+      accessories.splice(index, 1);
     }
 
-    updateCustomization({ accessories })
-  }
+    updateCustomization({ accessories });
+  };
 
   // Update accessory variant
   const updateAccessoryVariant = (accessoryId, variantId) => {
-    const accessories = [...customization.accessories]
-    const index = accessories.findIndex((a) => a.id === accessoryId)
+    const accessories = [...customization.accessories];
+    const index = accessories.findIndex((a) => a.id === accessoryId);
 
     if (index !== -1) {
       accessories[index] = {
         ...accessories[index],
         variant: variantId,
-      }
+      };
 
-      updateCustomization({ accessories })
+      updateCustomization({ accessories });
     }
-  }
+  };
 
   // Update outfit color
   const updateOutfitColor = (part, color) => {
-    const outfit = { ...customization.outfit, [part]: color }
-    updateCustomization({ outfit })
-  }
+    const outfit = { ...customization.outfit, [part]: color };
+    updateCustomization({ outfit });
+  };
 
   // Apply preset
   const applyPreset = (preset) => {
-    updateCustomization(preset.customization)
-  }
+    updateCustomization(preset.customization);
+  };
 
   // Randomize character
   const randomizeCharacter = () => {
-    const randomPreset = characterPresets[Math.floor(Math.random() * characterPresets.length)]
-    applyPreset(randomPreset)
+    const randomPreset =
+      characterPresets[Math.floor(Math.random() * characterPresets.length)];
+    applyPreset(randomPreset);
 
     // Add some randomization to features
     const randomFeatures = {
@@ -782,10 +862,10 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
       skinColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
       hairColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
       eyeColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-    }
+    };
 
-    updateCustomization(randomFeatures)
-  }
+    updateCustomization(randomFeatures);
+  };
 
   // Reset to defaults
   const resetCharacter = () => {
@@ -810,16 +890,16 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
         accessories: "#d69e2e",
       },
       accessories: [],
-    }
+    };
 
-    updateCustomization(defaultCustomization)
-  }
+    updateCustomization(defaultCustomization);
+  };
 
   // Take screenshot
   const takeScreenshot = () => {
     // In a real implementation, this would capture the canvas and save as an image
-    alert("Screenshot functionality would be implemented here")
-  }
+    alert("Screenshot functionality would be implemented here");
+  };
 
   if (isLoading) {
     return (
@@ -828,7 +908,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
         <h2 className="text-xl font-medium">Loading Character Creator...</h2>
         <p className="text-muted-foreground">Preparing 3D assets and tools</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -854,7 +934,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 </Button>
               </div>
             </div>
-            <CardDescription>View your character from all angles</CardDescription>
+            <CardDescription>
+              View your character from all angles
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-0 h-[500px] relative">
             <div className="absolute top-2 right-2 z-10 flex flex-col gap-2">
@@ -864,14 +946,18 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 onClick={() => setShowWireframe(!showWireframe)}
                 className={showWireframe ? "bg-primary/20" : ""}
               >
-                {showWireframe ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                {showWireframe ? (
+                  <Eye className="h-4 w-4" />
+                ) : (
+                  <EyeOff className="h-4 w-4" />
+                )}
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  setCameraPosition([0, 1.5, 4])
-                  setCameraTarget([0, 0, 0])
+                  setCameraPosition([0, 1.5, 4]);
+                  setCameraTarget([0, 0, 0]);
                 }}
               >
                 <Maximize className="h-4 w-4" />
@@ -890,9 +976,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 variant={viewMode === "head" ? "default" : "outline"}
                 size="sm"
                 onClick={() => {
-                  setViewMode("head")
-                  setCameraPosition([0, 2, 1.5])
-                  setCameraTarget([0, 1.8, 0])
+                  setViewMode("head");
+                  setCameraPosition([0, 2, 1.5]);
+                  setCameraTarget([0, 1.8, 0]);
                 }}
               >
                 Head
@@ -901,9 +987,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 variant={viewMode === "body" ? "default" : "outline"}
                 size="sm"
                 onClick={() => {
-                  setViewMode("body")
-                  setCameraPosition([0, 0.5, 2])
-                  setCameraTarget([0, 0, 0])
+                  setViewMode("body");
+                  setCameraPosition([0, 0.5, 2]);
+                  setCameraTarget([0, 0, 0]);
                 }}
               >
                 Body
@@ -912,9 +998,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 variant={viewMode === "outfit" ? "default" : "outline"}
                 size="sm"
                 onClick={() => {
-                  setViewMode("outfit")
-                  setCameraPosition([0, 0, 2])
-                  setCameraTarget([0, -0.5, 0])
+                  setViewMode("outfit");
+                  setCameraPosition([0, 0, 2]);
+                  setCameraTarget([0, -0.5, 0]);
                 }}
               >
                 Outfit
@@ -934,7 +1020,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 position={cameraPosition}
                 setPosition={setCameraPosition}
               />
-              {showWireframe && <gridHelper args={[10, 10, "#444444", "#222222"]} />}
+              {showWireframe && (
+                <gridHelper args={[10, 10, "#444444", "#222222"]} />
+              )}
             </Canvas>
           </CardContent>
         </Card>
@@ -947,7 +1035,12 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
             <div className="flex items-center justify-between">
               <CardTitle>Customization</CardTitle>
               <div className="flex gap-2">
-                <Button variant="outline" size="icon" onClick={handleUndo} disabled={historyIndex === 0}>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleUndo}
+                  disabled={historyIndex === 0}
+                >
                   <Undo className="h-4 w-4" />
                 </Button>
                 <Button
@@ -958,12 +1051,18 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 >
                   <Redo className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="icon" onClick={randomizeCharacter}>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={randomizeCharacter}
+                >
                   <Shuffle className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-            <CardDescription>Customize your character's appearance</CardDescription>
+            <CardDescription>
+              Customize your character's appearance
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -980,7 +1079,11 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                 <TabsContent value="presets" className="space-y-4">
                   <div className="flex justify-between items-center">
                     <h3 className="text-sm font-medium">Character Presets</h3>
-                    <Button variant="outline" size="sm" onClick={resetCharacter}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={resetCharacter}
+                    >
                       Reset
                     </Button>
                   </div>
@@ -1006,27 +1109,35 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                     <Input
                       id="name"
                       value={customization.name}
-                      onChange={(e) => updateCustomization({ name: e.target.value })}
+                      onChange={(e) =>
+                        updateCustomization({ name: e.target.value })
+                      }
                     />
                   </div>
 
                   <ColorPicker
                     label="Skin Color"
                     color={customization.skinColor}
-                    onChange={(color) => updateCustomization({ skinColor: color })}
+                    onChange={(color) =>
+                      updateCustomization({ skinColor: color })
+                    }
                   />
 
                   <ColorPicker
                     label="Eye Color"
                     color={customization.eyeColor}
-                    onChange={(color) => updateCustomization({ eyeColor: color })}
+                    onChange={(color) =>
+                      updateCustomization({ eyeColor: color })
+                    }
                   />
 
                   <div className="space-y-2">
                     <Label>Hair Style</Label>
                     <Select
                       value={customization.hairStyle}
-                      onValueChange={(value) => updateCustomization({ hairStyle: value })}
+                      onValueChange={(value) =>
+                        updateCustomization({ hairStyle: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select hair style" />
@@ -1044,7 +1155,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                   <ColorPicker
                     label="Hair Color"
                     color={customization.hairColor}
-                    onChange={(color) => updateCustomization({ hairColor: color })}
+                    onChange={(color) =>
+                      updateCustomization({ hairColor: color })
+                    }
                   />
                 </TabsContent>
 
@@ -1053,7 +1166,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Label htmlFor="height">Height</Label>
-                      <span className="text-sm text-muted-foreground">{Math.round(customization.height * 100)}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(customization.height * 100)}%
+                      </span>
                     </div>
                     <Slider
                       id="height"
@@ -1061,14 +1176,18 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       max={1}
                       step={0.01}
                       value={[customization.height]}
-                      onValueChange={([value]) => updateCustomization({ height: value })}
+                      onValueChange={([value]) =>
+                        updateCustomization({ height: value })
+                      }
                     />
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Label htmlFor="build">Muscle Build</Label>
-                      <span className="text-sm text-muted-foreground">{Math.round(customization.build * 100)}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(customization.build * 100)}%
+                      </span>
                     </div>
                     <Slider
                       id="build"
@@ -1076,14 +1195,18 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       max={1}
                       step={0.01}
                       value={[customization.build]}
-                      onValueChange={([value]) => updateCustomization({ build: value })}
+                      onValueChange={([value]) =>
+                        updateCustomization({ build: value })
+                      }
                     />
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Label htmlFor="weight">Weight</Label>
-                      <span className="text-sm text-muted-foreground">{Math.round(customization.weight * 100)}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(customization.weight * 100)}%
+                      </span>
                     </div>
                     <Slider
                       id="weight"
@@ -1091,7 +1214,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       max={1}
                       step={0.01}
                       value={[customization.weight]}
-                      onValueChange={([value]) => updateCustomization({ weight: value })}
+                      onValueChange={([value]) =>
+                        updateCustomization({ weight: value })
+                      }
                     />
                   </div>
 
@@ -1100,7 +1225,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Label htmlFor="smile">Smile</Label>
-                      <span className="text-sm text-muted-foreground">{Math.round(customization.smile * 100)}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(customization.smile * 100)}%
+                      </span>
                     </div>
                     <Slider
                       id="smile"
@@ -1108,14 +1235,18 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       max={1}
                       step={0.01}
                       value={[customization.smile]}
-                      onValueChange={([value]) => updateCustomization({ smile: value })}
+                      onValueChange={([value]) =>
+                        updateCustomization({ smile: value })
+                      }
                     />
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Label htmlFor="eyeSize">Eye Size</Label>
-                      <span className="text-sm text-muted-foreground">{Math.round(customization.eyeSize * 100)}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(customization.eyeSize * 100)}%
+                      </span>
                     </div>
                     <Slider
                       id="eyeSize"
@@ -1123,14 +1254,18 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       max={1}
                       step={0.01}
                       value={[customization.eyeSize]}
-                      onValueChange={([value]) => updateCustomization({ eyeSize: value })}
+                      onValueChange={([value]) =>
+                        updateCustomization({ eyeSize: value })
+                      }
                     />
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Label htmlFor="jawWidth">Jaw Width</Label>
-                      <span className="text-sm text-muted-foreground">{Math.round(customization.jawWidth * 100)}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(customization.jawWidth * 100)}%
+                      </span>
                     </div>
                     <Slider
                       id="jawWidth"
@@ -1138,14 +1273,18 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       max={1}
                       step={0.01}
                       value={[customization.jawWidth]}
-                      onValueChange={([value]) => updateCustomization({ jawWidth: value })}
+                      onValueChange={([value]) =>
+                        updateCustomization({ jawWidth: value })
+                      }
                     />
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <Label htmlFor="noseSize">Nose Size</Label>
-                      <span className="text-sm text-muted-foreground">{Math.round(customization.noseSize * 100)}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(customization.noseSize * 100)}%
+                      </span>
                     </div>
                     <Slider
                       id="noseSize"
@@ -1153,7 +1292,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       max={1}
                       step={0.01}
                       value={[customization.noseSize]}
-                      onValueChange={([value]) => updateCustomization({ noseSize: value })}
+                      onValueChange={([value]) =>
+                        updateCustomization({ noseSize: value })
+                      }
                     />
                   </div>
                 </TabsContent>
@@ -1164,7 +1305,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                     <Label>Outfit Style</Label>
                     <Select
                       value={customization.outfitStyle}
-                      onValueChange={(value) => updateCustomization({ outfitStyle: value })}
+                      onValueChange={(value) =>
+                        updateCustomization({ outfitStyle: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select outfit style" />
@@ -1205,7 +1348,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                       <ColorPicker
                         label="Accessories"
                         color={customization.outfit.accessories}
-                        onChange={(color) => updateOutfitColor("accessories", color)}
+                        onChange={(color) =>
+                          updateOutfitColor("accessories", color)
+                        }
                       />
                     </div>
                   </div>
@@ -1218,7 +1363,9 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                     <ScrollArea className="h-[300px] pr-4">
                       <div className="space-y-2">
                         {accessoryOptions.map((accessory) => {
-                          const isSelected = customization.accessories.some((a) => a.id === accessory.id)
+                          const isSelected = customization.accessories.some(
+                            (a) => a.id === accessory.id,
+                          );
                           return (
                             <div key={accessory.id} className="space-y-2">
                               <AccessoryItem
@@ -1230,15 +1377,27 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                               {isSelected && accessory.variants && (
                                 <div className="ml-12 mt-2">
                                   <Select
-                                    value={customization.accessories.find((a) => a.id === accessory.id)?.variant || ""}
-                                    onValueChange={(value) => updateAccessoryVariant(accessory.id, value)}
+                                    value={
+                                      customization.accessories.find(
+                                        (a) => a.id === accessory.id,
+                                      )?.variant || ""
+                                    }
+                                    onValueChange={(value) =>
+                                      updateAccessoryVariant(
+                                        accessory.id,
+                                        value,
+                                      )
+                                    }
                                   >
                                     <SelectTrigger className="w-full">
                                       <SelectValue placeholder="Select variant" />
                                     </SelectTrigger>
                                     <SelectContent>
                                       {accessory.variants.map((variant) => (
-                                        <SelectItem key={variant.id} value={variant.id}>
+                                        <SelectItem
+                                          key={variant.id}
+                                          value={variant.id}
+                                        >
                                           {variant.name}
                                         </SelectItem>
                                       ))}
@@ -1247,7 +1406,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                                 </div>
                               )}
                             </div>
-                          )
+                          );
                         })}
                       </div>
                     </ScrollArea>
@@ -1258,7 +1417,11 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
                   <div className="space-y-2">
                     <Label htmlFor="import">Import/Export</Label>
                     <div className="flex gap-2">
-                      <Button variant="outline" className="flex-1" onClick={handleExport}>
+                      <Button
+                        variant="outline"
+                        className="flex-1"
+                        onClick={handleExport}
+                      >
                         <Download className="mr-2 h-4 w-4" />
                         Export
                       </Button>
@@ -1307,7 +1470,7 @@ export default function EnhancedCharacterCreator({ onSave, initialCustomization 
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 // Helper component for Circle icon
@@ -1325,5 +1488,5 @@ function Circle({ className }) {
     >
       <circle cx="12" cy="12" r="10" />
     </svg>
-  )
+  );
 }

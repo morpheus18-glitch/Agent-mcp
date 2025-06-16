@@ -1,28 +1,33 @@
-import { query, closePool } from "../lib/db"
-import dotenv from "dotenv"
+import { query, closePool } from "../lib/db";
+import dotenv from "dotenv";
 
 // Load environment variables
-dotenv.config({ path: ".env.local" })
+dotenv.config({ path: ".env.local" });
 
 async function setupDatabase() {
-  console.log("🚀 Setting up database...")
+  console.log("🚀 Setting up database...");
 
   try {
     // Test connection
-    const result = await query("SELECT NOW() as current_time")
-    console.log(`✅ Connected to database at ${result.rows[0].current_time}`)
+    const result = await query("SELECT NOW() as current_time");
+    console.log(`✅ Connected to database at ${result.rows[0].current_time}`);
 
     // Enable pgvector extension if available
     try {
-      await query("CREATE EXTENSION IF NOT EXISTS vector;")
-      console.log("✅ Vector extension enabled successfully.")
+      await query("CREATE EXTENSION IF NOT EXISTS vector;");
+      console.log("✅ Vector extension enabled successfully.");
     } catch (error) {
-      console.warn("⚠️ Warning: Could not enable vector extension. Some features may not work:", error.message)
-      console.warn("You may need to enable the vector extension in your Neon dashboard.")
+      console.warn(
+        "⚠️ Warning: Could not enable vector extension. Some features may not work:",
+        error.message,
+      );
+      console.warn(
+        "You may need to enable the vector extension in your Neon dashboard.",
+      );
     }
 
     // Create tables
-    console.log("\n📊 Creating tables...")
+    console.log("\n📊 Creating tables...");
 
     // Users Table
     await query(`
@@ -37,8 +42,8 @@ async function setupDatabase() {
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         last_login TIMESTAMP WITH TIME ZONE
       );
-    `)
-    console.log("✅ Users table created.")
+    `);
+    console.log("✅ Users table created.");
 
     // User Profiles Table
     await query(`
@@ -48,8 +53,8 @@ async function setupDatabase() {
         bio TEXT,
         preferences JSONB DEFAULT '{}'::jsonb
       );
-    `)
-    console.log("✅ User profiles table created.")
+    `);
+    console.log("✅ User profiles table created.");
 
     // Agents Table
     await query(`
@@ -66,8 +71,8 @@ async function setupDatabase() {
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ Agents table created.")
+    `);
+    console.log("✅ Agents table created.");
 
     // Conversations Table
     await query(`
@@ -84,8 +89,8 @@ async function setupDatabase() {
         completed_at TIMESTAMP WITH TIME ZONE,
         settings JSONB DEFAULT '{}'::jsonb
       );
-    `)
-    console.log("✅ Conversations table created.")
+    `);
+    console.log("✅ Conversations table created.");
 
     // Conversation Agents Table
     await query(`
@@ -96,8 +101,8 @@ async function setupDatabase() {
         left_at TIMESTAMP WITH TIME ZONE,
         PRIMARY KEY (conversation_id, agent_id)
       );
-    `)
-    console.log("✅ Conversation agents table created.")
+    `);
+    console.log("✅ Conversation agents table created.");
 
     // Messages Table
     await query(`
@@ -110,8 +115,8 @@ async function setupDatabase() {
         thinking TEXT,
         metadata JSONB DEFAULT '{}'::jsonb
       );
-    `)
-    console.log("✅ Messages table created.")
+    `);
+    console.log("✅ Messages table created.");
 
     // Try to create vector-dependent tables
     try {
@@ -123,17 +128,20 @@ async function setupDatabase() {
           embedding vector(1536) NOT NULL,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
-      `)
-      console.log("✅ Message embeddings table created.")
+      `);
+      console.log("✅ Message embeddings table created.");
 
       // Create vector indexes
       await query(`
         CREATE INDEX IF NOT EXISTS idx_message_embeddings_vector ON message_embeddings USING ivfflat (embedding vector_cosine_ops);
-      `)
-      console.log("✅ Vector indexes created.")
+      `);
+      console.log("✅ Vector indexes created.");
     } catch (error) {
-      console.warn("⚠️ Warning: Could not create vector-dependent tables:", error.message)
-      console.warn("Creating alternative tables without vector support...")
+      console.warn(
+        "⚠️ Warning: Could not create vector-dependent tables:",
+        error.message,
+      );
+      console.warn("Creating alternative tables without vector support...");
 
       // Create alternative tables without vector support
       await query(`
@@ -143,8 +151,8 @@ async function setupDatabase() {
           embedding_json JSONB NOT NULL,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
-      `)
-      console.log("✅ Alternative tables without vector support created.")
+      `);
+      console.log("✅ Alternative tables without vector support created.");
     }
 
     // Templates Table
@@ -161,8 +169,8 @@ async function setupDatabase() {
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ Templates table created.")
+    `);
+    console.log("✅ Templates table created.");
 
     // Agent Templates Table
     await query(`
@@ -176,8 +184,8 @@ async function setupDatabase() {
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ Agent templates table created.")
+    `);
+    console.log("✅ Agent templates table created.");
 
     // Conversation Tags Table
     await query(`
@@ -186,8 +194,8 @@ async function setupDatabase() {
         tag VARCHAR(100) NOT NULL,
         PRIMARY KEY (conversation_id, tag)
       );
-    `)
-    console.log("✅ Conversation tags table created.")
+    `);
+    console.log("✅ Conversation tags table created.");
 
     // Conversation Analysis Table
     await query(`
@@ -198,8 +206,8 @@ async function setupDatabase() {
         results JSONB NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ Conversation analysis table created.")
+    `);
+    console.log("✅ Conversation analysis table created.");
 
     // Sentiment Analysis Table
     await query(`
@@ -211,8 +219,8 @@ async function setupDatabase() {
         confidence REAL NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ Sentiment analysis table created.")
+    `);
+    console.log("✅ Sentiment analysis table created.");
 
     // AI Memory Table
     await query(`
@@ -223,8 +231,8 @@ async function setupDatabase() {
         context JSONB,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ AI memory table created.")
+    `);
+    console.log("✅ AI memory table created.");
 
     // Training Jobs Table
     await query(`
@@ -237,8 +245,8 @@ async function setupDatabase() {
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ Training jobs table created.")
+    `);
+    console.log("✅ Training jobs table created.");
 
     // System Metrics Table
     await query(`
@@ -248,8 +256,8 @@ async function setupDatabase() {
         metric_value DOUBLE PRECISION NOT NULL,
         timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
-    `)
-    console.log("✅ System metrics table created.")
+    `);
+    console.log("✅ System metrics table created.");
 
     // Create indexes for better performance
     await query(`
@@ -257,25 +265,25 @@ async function setupDatabase() {
       CREATE INDEX IF NOT EXISTS idx_conversation_agents_conversation_id ON conversation_agents(conversation_id);
       CREATE INDEX IF NOT EXISTS idx_conversations_created_by ON conversations(created_by);
       CREATE INDEX IF NOT EXISTS idx_agents_created_by ON agents(created_by);
-    `)
-    console.log("✅ Indexes created.")
+    `);
+    console.log("✅ Indexes created.");
 
-    console.log("\n🎉 Database setup completed successfully!")
+    console.log("\n🎉 Database setup completed successfully!");
   } catch (error) {
-    console.error("❌ Error setting up database:", error)
-    throw error
+    console.error("❌ Error setting up database:", error);
+    throw error;
   } finally {
-    await closePool()
+    await closePool();
   }
 }
 
 // Run the setup
 setupDatabase()
   .then(() => {
-    console.log("Database setup script completed.")
-    process.exit(0)
+    console.log("Database setup script completed.");
+    process.exit(0);
   })
   .catch((error) => {
-    console.error("Database setup failed:", error)
-    process.exit(1)
-  })
+    console.error("Database setup failed:", error);
+    process.exit(1);
+  });

@@ -1,46 +1,53 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import type { File } from "@/types/database"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import type { File } from "@/types/database";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 interface FileListProps {
-  userId?: string
+  userId?: string;
 }
 
 export default function FileList({ userId }: FileListProps) {
-  const [files, setFiles] = useState<File[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [files, setFiles] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchFiles() {
       try {
-        const url = userId ? `/api/files?userId=${userId}` : "/api/files"
-        const response = await fetch(url)
+        const url = userId ? `/api/files?userId=${userId}` : "/api/files";
+        const response = await fetch(url);
         if (!response.ok) {
-          throw new Error("Failed to fetch files")
+          throw new Error("Failed to fetch files");
         }
-        const data = await response.json()
-        setFiles(data)
+        const data = await response.json();
+        setFiles(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred")
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    fetchFiles()
-  }, [userId])
+    fetchFiles();
+  }, [userId]);
 
   if (isLoading) {
-    return <div className="flex justify-center p-4">Loading files...</div>
+    return <div className="flex justify-center p-4">Loading files...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500 p-4">Error: {error}</div>
+    return <div className="text-red-500 p-4">Error: {error}</div>;
   }
 
   return (
@@ -68,10 +75,16 @@ export default function FileList({ userId }: FileListProps) {
                   <TableCell>{file.name}</TableCell>
                   <TableCell>{file.type}</TableCell>
                   <TableCell>{formatFileSize(file.size)}</TableCell>
-                  <TableCell>{new Date(file.created_at).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Date(file.created_at).toLocaleDateString()}
+                  </TableCell>
                   <TableCell>
                     <Button variant="outline" size="sm" asChild>
-                      <a href={file.url} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={file.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         Download
                       </a>
                     </Button>
@@ -83,13 +96,15 @@ export default function FileList({ userId }: FileListProps) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 Bytes"
-  const k = 1024
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"]
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return (
+    Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+  );
 }
