@@ -356,6 +356,120 @@ async function setupDatabase() {
     `)
     console.log("✅ Configurations table created.")
 
+    // Stores Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS stores (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(255) NOT NULL,
+        contact_email VARCHAR(255),
+        contact_phone VARCHAR(50),
+        address TEXT,
+        settings JSONB DEFAULT '{}'::jsonb,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Stores table created.")
+
+    // Store Deal Presets Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS store_deal_presets (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        store_id UUID REFERENCES stores(id) ON DELETE CASCADE,
+        preset_name VARCHAR(255) NOT NULL,
+        payload JSONB NOT NULL,
+        is_default BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (store_id, preset_name)
+      );
+    `)
+    console.log("✅ Store deal presets table created.")
+
+    // Customers Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS customers (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        store_id UUID REFERENCES stores(id) ON DELETE CASCADE,
+        first_name VARCHAR(100) NOT NULL,
+        last_name VARCHAR(100) NOT NULL,
+        email VARCHAR(255),
+        phone VARCHAR(50),
+        profile JSONB DEFAULT '{}'::jsonb,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Customers table created.")
+
+    // Customer Deal Presets Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS customer_deal_presets (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
+        preset_name VARCHAR(255) NOT NULL,
+        payload JSONB NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (customer_id, preset_name)
+      );
+    `)
+    console.log("✅ Customer deal presets table created.")
+
+    // Deals Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS deals (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        store_id UUID REFERENCES stores(id) ON DELETE CASCADE,
+        customer_id UUID REFERENCES customers(id) ON DELETE SET NULL,
+        title VARCHAR(255) NOT NULL,
+        vehicle JSONB DEFAULT '{}'::jsonb,
+        status VARCHAR(50) DEFAULT 'draft',
+        base_price NUMERIC(12, 2) NOT NULL DEFAULT 0,
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Deals table created.")
+
+    // Deal Scenarios Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS deal_scenarios (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        deal_id UUID REFERENCES deals(id) ON DELETE CASCADE,
+        scenario_type VARCHAR(20) NOT NULL,
+        version INTEGER NOT NULL DEFAULT 1,
+        price NUMERIC(12, 2) NOT NULL,
+        down_payment NUMERIC(12, 2) DEFAULT 0,
+        term_months INTEGER,
+        apr NUMERIC(5, 3),
+        money_factor NUMERIC(8, 6),
+        residual_value NUMERIC(12, 2),
+        payment NUMERIC(12, 2),
+        fees JSONB DEFAULT '{}'::jsonb,
+        taxes JSONB DEFAULT '{}'::jsonb,
+        metadata JSONB DEFAULT '{}'::jsonb,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Deal scenarios table created.")
+
+    // Deal Documents Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS deal_documents (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        deal_id UUID REFERENCES deals(id) ON DELETE CASCADE,
+        scenario_id UUID REFERENCES deal_scenarios(id) ON DELETE SET NULL,
+        document_type VARCHAR(50) NOT NULL,
+        file_name VARCHAR(255) NOT NULL,
+        pdf_data BYTEA NOT NULL,
+        metadata JSONB DEFAULT '{}'::jsonb,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `)
+    console.log("✅ Deal documents table created.")
+
     // Create indexes for better performance
     await query(`
       CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON messages(conversation_id);
@@ -365,6 +479,12 @@ async function setupDatabase() {
       CREATE INDEX IF NOT EXISTS idx_menus_parent_id ON menus(parent_id);
       CREATE INDEX IF NOT EXISTS idx_audit_logs_user_id ON audit_logs(user_id);
       CREATE INDEX IF NOT EXISTS idx_settings_user_id ON settings(user_id);
+      CREATE INDEX IF NOT EXISTS idx_stores_name ON stores(name);
+      CREATE INDEX IF NOT EXISTS idx_customers_store_id ON customers(store_id);
+      CREATE INDEX IF NOT EXISTS idx_deals_store_id ON deals(store_id);
+      CREATE INDEX IF NOT EXISTS idx_deals_customer_id ON deals(customer_id);
+      CREATE INDEX IF NOT EXISTS idx_deal_scenarios_deal_id ON deal_scenarios(deal_id);
+      CREATE INDEX IF NOT EXISTS idx_deal_documents_deal_id ON deal_documents(deal_id);
     `)
     console.log("✅ Indexes created.")
 
