@@ -117,3 +117,87 @@ export interface Configuration {
   value: string
   updated_at: Date
 }
+
+export interface Store {
+  id: string
+  name: string
+  contact_email: string | null
+  contact_phone: string | null
+  address: string | null
+  settings: Record<string, unknown>
+  created_at: Date
+  updated_at: Date
+}
+
+export interface StoreDealPreset {
+  id: string
+  store_id: string
+  preset_name: string
+  payload: Record<string, unknown>
+  is_default: boolean
+  created_at: Date
+  updated_at: Date
+}
+
+export interface Customer {
+  id: string
+  store_id: string
+  first_name: string
+  last_name: string
+  email: string | null
+  phone: string | null
+  profile: Record<string, unknown>
+  created_at: Date
+  updated_at: Date
+}
+
+export interface CustomerDealPreset {
+  id: string
+  customer_id: string
+  preset_name: string
+  payload: Record<string, unknown>
+  created_at: Date
+  updated_at: Date
+}
+
+export interface Deal {
+  id: string
+  store_id: string
+  customer_id: string | null
+  title: string
+  vehicle: Record<string, unknown>
+  status: string
+  base_price: string
+  notes: string | null
+  created_at: Date
+  updated_at: Date
+}
+
+export interface DealScenario {
+  id: string
+  deal_id: string
+  scenario_type: string
+  version: number
+  price: string
+  down_payment: string | null
+  term_months: number | null
+  apr: string | null
+  money_factor: string | null
+  residual_value: string | null
+  payment: string | null
+  fees: Record<string, unknown>
+  taxes: Record<string, unknown>
+  metadata: Record<string, unknown>
+  created_at: Date
+}
+
+export interface DealDocument {
+  id: string
+  deal_id: string
+  scenario_id: string | null
+  document_type: string
+  file_name: string
+  pdf_data: Buffer
+  metadata: Record<string, unknown>
+  created_at: Date
+}
