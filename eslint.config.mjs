@@ -4,6 +4,10 @@ import react from 'eslint-plugin-react';
 import prettier from 'eslint-config-prettier';
 
 export default [
+  // Ignore generated files and build artifacts
+  {
+    ignores: ['.next/**', 'node_modules/**', '.next/types/**', 'out/**', 'build/**', 'next-env.d.ts'],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -25,6 +29,8 @@ export default [
     },
     rules: {
       'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
   },
   prettier,
