@@ -42,7 +42,7 @@ async function seedAdminUser() {
     console.log("Email: admin@example.com")
     console.log("Password: Admin123!")
     console.log("Please change this password after first login.")
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error seeding admin user:", error)
   }
 }
@@ -53,7 +53,7 @@ seedAdminUser()
     console.log("Seed completed.")
     process.exit(0)
   })
-  .catch((error) => {
+  .catch((error: unknown) => {
     console.error("Seed failed:", error)
     process.exit(1)
   })

@@ -34,14 +34,14 @@ async function testConnection() {
     if (tables.rows.length === 0) {
       console.log("No tables found. You may need to run the setup-db script.")
     } else {
-      tables.rows.forEach((row, index) => {
+      tables.rows.forEach((row: { table_name: string }, index: number) => {
         console.log(`${index + 1}. ${row.table_name}`)
       })
 
       // Verify critical tables exist
       const requiredTables = ["users", "conversations"]
       const missingTables = requiredTables.filter(
-        (name) => !tables.rows.some((row) => row.table_name === name)
+        (name) => !tables.rows.some((row: { table_name: string }) => row.table_name === name)
       )
       if (missingTables.length > 0) {
         console.warn(
@@ -49,7 +49,7 @@ async function testConnection() {
         )
       }
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Database connection test failed:", error)
   } finally {
     // Close the pool
@@ -63,7 +63,7 @@ testConnection()
     console.log("Test completed.")
     process.exit(0)
   })
-  .catch((error) => {
+  .catch((error: unknown) => {
     console.error("Test failed with error:", error)
     process.exit(1)
   })

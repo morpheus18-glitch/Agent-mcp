@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { neon } from "@neondatabase/serverless"
-import type { NeonQueryFunction } from "@neondatabase/serverless"
 
-let cachedSql: NeonQueryFunction | null = null
+type Sql = any
+
+let cachedSql: Sql | null = null
 
 /**
  * Lazily create and return the Neon client. This avoids evaluating the
  * connection string at build time when environment variables might not be set.
  */
-function getSqlClient(): NeonQueryFunction {
+function getSqlClient(): Sql {
   if (!cachedSql) {
     const url = process.env.DATABASE_URL
     if (!url) {
@@ -21,20 +23,20 @@ function getSqlClient(): NeonQueryFunction {
 // Provide a wrapper around the neon transaction API so callers receive an
 // object with a `query` method. This matches how our scripts use the helper.
 export async function transaction<T>(
-  fn: (client: { query: NeonQueryFunction }) => Promise<T>,
+  fn: (client: { query: Sql }) => Promise<T>,
 ): Promise<T> {
   const sql = getSqlClient()
-  return sql.transaction((inner) => {
+  return sql.transaction((inner: any) => {
     const client = { query: inner }
     return fn(client)
   })
 }
 
 // Helper function to execute a query
-export async function query(query: string, params: unknown[] = []) {
+export async function query(query: string, params: unknown[] = []): Promise<any> {
   try {
     const sql = getSqlClient()
-    return await sql(query, params)
+    return await sql.query(query, params)
   } catch (error) {
     console.error("Database query error:", error)
     throw error

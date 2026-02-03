@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "check-env": "ts-node scripts/check-env.ts",
-    "setup": "ts-node scripts/setup.ts",
-    "setup-db": "ts-node scripts/setup-database.ts",
-    "test-db": "ts-node scripts/test-db-connection.ts",
-    "seed-admin": "ts-node scripts/seed-admin-user.ts",
+    "check-env": "TS_NODE_FILES=true ts-node -P tsconfig.scripts.json scripts/check-env.ts",
+    "setup": "TS_NODE_FILES=true ts-node -P tsconfig.scripts.json scripts/setup.ts",
+    "setup-db": "TS_NODE_FILES=true ts-node -P tsconfig.scripts.json scripts/setup-database.ts",
+    "test-db": "TS_NODE_FILES=true ts-node -P tsconfig.scripts.json scripts/test-db-connection.ts",
+    "seed-admin": "TS_NODE_FILES=true ts-node -P tsconfig.scripts.json scripts/seed-admin-user.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {

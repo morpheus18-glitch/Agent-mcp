@@ -38,6 +38,17 @@ cd llm-sandbox
 pnpm install
 ```
 
+### 2.5 Start PostgreSQL with Docker Compose
+
+Copy `docker/postgres.env.example` to `docker/postgres.env` and then start the database:
+
+```bash
+cp docker/postgres.env.example docker/postgres.env
+docker-compose up -d db
+```
+
+This launches a local Postgres instance on port `5432` with the credentials from `docker/postgres.env`.
+
 ### 3. Run the Setup Script
 
 The setup script will guide you through setting up environment variables and the database:
@@ -74,8 +85,8 @@ Create a `.env.local` file in the root directory with the following variables:
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-nextauth-secret-key
 
-# Database Configuration (Neon PostgreSQL)
-DATABASE_URL=postgres://user:password@hostname:port/database
+# Database Configuration
+DATABASE_URL=postgres://llmsandbox:llmsandbox@localhost:5432/llm_sandbox
 
 # LLM API Keys
 GROQ_API_KEY=your-groq-api-key
@@ -89,6 +100,8 @@ UPSTASH_VECTOR_REST_TOKEN=your-upstash-vector-token
 ### 2. Set Up the Database
 
 ```bash
+cp docker/postgres.env.example docker/postgres.env
+docker-compose up -d db
 pnpm run setup-db
 ```
 
