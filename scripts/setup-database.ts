@@ -51,6 +51,17 @@ async function setupDatabase() {
     `)
     console.log("✅ User profiles table created.")
 
+    // Password Reset Tokens Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS password_reset_tokens (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        token UUID NOT NULL,
+        expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+      );
+    `)
+    console.log("✅ Password reset tokens table created.")
+
     // Agents Table
     await query(`
       CREATE TABLE IF NOT EXISTS agents (

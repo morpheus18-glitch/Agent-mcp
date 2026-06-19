@@ -11,6 +11,8 @@ export async function middleware(request: NextRequest) {
     path === "/" ||
     path === "/login" ||
     path === "/register" ||
+    path === "/forgot-password" ||
+    path === "/reset-password" ||
     path === "/setup" ||
     path.startsWith("/auth/") ||
     path.startsWith("/api/auth/")
@@ -29,8 +31,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (token && (path === "/login" || path === "/register")) {
+  if (token && (path === "/login" || path === "/register" || path === "/forgot-password" || path === "/reset-password")) {
     // Redirect to dashboard if trying to access login/register while logged in
+    return NextResponse.redirect(new URL("/dashboard", request.url))
+  }
+
+  if (token && path.startsWith("/admin") && token.role !== "admin") {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
@@ -49,7 +55,10 @@ export const config = {
     "/templates/:path*",
     "/analytics/:path*",
     "/sandbox/:path*",
+    "/admin/:path*",
     "/login",
     "/register",
+    "/forgot-password",
+    "/reset-password",
   ],
 }
