@@ -19,10 +19,12 @@ RUN corepack enable pnpm && pnpm run build
 FROM base AS runner
 WORKDIR /app
 
+# Enable pnpm for runtime
+RUN corepack enable pnpm
+
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-USER nextjs
 
 # Copy built Next.js app
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
@@ -30,12 +32,15 @@ COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# Copy startup script
-COPY --from=builder --chown=nextjs:nodejs /app/scripts/start.sh ./start.sh
-RUN chmod +x ./start.sh
+# Switch to non-root user
+USER nextjs
 
 # Expose port
 EXPOSE 3000
+
+# Set environment to production
+ENV NODE_ENV=production
+ENV PORT=3000
 
 # Start the application
 CMD ["pnpm", "start"]
